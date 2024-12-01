@@ -7,8 +7,8 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen font-[family-name:var(--font-parkin-sans)]">
-      <div className="grid grid-rows-[200px_1fr] px-20 flex-grow">
-        <div className="flex text-left font-semibold items-center">
+      <div className="grid grid-rows-[200px_1fr] px-5 md:px-20 flex-grow">
+        <div className="flex text-left font-semibold items-center text-xl md:text-2xl">
           <TypingAnimation
             words={[
               "Food reviewer",
@@ -22,8 +22,8 @@ export default function Home() {
             delayBetweenWords={500}
           />
         </div>
-        <div className="grid grid-cols-2 gap-10">
-          <div className="flex text-left text-base font-medium">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
+          <div className="flex text-left text-base md:text-lg font-medium">
             I&apos;m a dedicated software developer with a passion for solving complex
             problems and crafting smooth, user-focused experiences. Over the
             years, I&apos;ve built skills in full-stack development, managing both
@@ -68,7 +68,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <Image
-            src="/Li-In-Bug.png"
+            src="/linkedin.png"
             alt="LinkedIn Logo"
             width={40}
             height={40}

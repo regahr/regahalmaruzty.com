@@ -29,7 +29,7 @@ const CodePuzzle: React.FC = () => {
       const userFunction = new Function("return " + code)();
 
       const output = userFunction(currentPuzzle.current.testInput);
-        
+
       if (output === currentPuzzle.current.expectedOutput) {
         setResult("Correct!");
         setIsCorrect(true);
@@ -38,7 +38,7 @@ const CodePuzzle: React.FC = () => {
         setIsCorrect(false);
       }
     } catch (error) {
-        console.log(error)
+      console.log(error);
       setResult("Error in your code. Please fix it.");
       setIsCorrect(false);
     }
@@ -56,7 +56,7 @@ const CodePuzzle: React.FC = () => {
   return (
     <div className="grid grid-rows">
       <div className="flex text-left text-sm font-medium">
-        Unleash your inner coder!
+        Co-zzle for the day!
       </div>
       <div className="flex text-left text-sm font-medium">
         {currentPuzzle.current.description}
@@ -76,13 +76,13 @@ const CodePuzzle: React.FC = () => {
       />
       <button
         onClick={handleSubmit}
-        className="mt-4 p-2 bg-blue-500 text-white rounded w-max-5"
+        className="mt-4 p-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded shadow-md hover:from-green-300 hover:to-blue-400 transition duration-300"
       >
         Submit
       </button>
       <button
         onClick={getHint}
-        className="mt-2 p-2 bg-yellow-500 text-white rounded w-max-5"
+        className="mt-2 p-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded shadow-md hover:from-yellow-300 hover:to-orange-400 transition duration-300"
       >
         Get Hint
       </button>

@@ -11,6 +11,20 @@ const parkinsans = localFont({
 export const metadata: Metadata = {
   title: "Rega Halma Ruzty",
   description: "Personal website of Rega",
+  openGraph: {
+    title: "Rega Halma Ruzty",
+    description: "Personal website of Rega showcasing my work and projects.",
+    url: "https://regahalmaruzty.com", // Replace with your actual URL
+    siteName: "Rega Halma Ruzty",
+    images: [
+      {
+        url: "https://regahalmaruzty.com/rega.png", // Replace with your actual image URL
+        width: 800,
+        height: 600,
+        alt: "My name",
+      },
+    ],
+  }
 };
 
 export default function RootLayout({

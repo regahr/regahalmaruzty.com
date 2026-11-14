@@ -179,7 +179,13 @@ export function contactShadow(size: number, opacity: number): THREE.Mesh {
 // A text label drawn to a canvas, shown as a sprite that always faces the camera.
 export function makeLabel(
   text: string,
-  { color, font, height = 0.26, weight = 400 }: { color: string; font: string; height?: number; weight?: number },
+  {
+    color,
+    font,
+    height = 0.26,
+    weight = 400,
+    px = 64,
+  }: { color: string; font: string; height?: number; weight?: number; px?: number },
 ) {
   const c = document.createElement("canvas");
   c.width = 512;
@@ -192,7 +198,7 @@ export function makeLabel(
 
   function set(next: string, nextColor = color) {
     g.clearRect(0, 0, 512, 128);
-    g.font = `${weight} 64px ${font}`;
+    g.font = `${weight} ${px}px ${font}`;
     g.textAlign = "center";
     g.textBaseline = "middle";
     g.fillStyle = nextColor;

@@ -3,7 +3,7 @@ import TypingAnimation from "./components/TypingAnimation";
 import CodePuzzle from "./components/CodePuzzle";
 import Reveal from "./components/Reveal";
 import ChickPen from "./components/three/ChickPen";
-import RetryExplainer from "./components/three/RetryExplainer";
+import ConceptShowcase from "./components/three/ConceptShowcase";
 import {
   about,
   caseStudies,
@@ -234,8 +234,11 @@ export default function Home() {
                 </div>
               </article>
             ))}
-            <RetryExplainer />
           </Reveal>
+        </Section>
+
+        <Section id="how" label="how it works" title="The patterns behind the work">
+          <ConceptShowcase />
         </Section>
 
         <Section id="projects" label="projects" title="Open source">

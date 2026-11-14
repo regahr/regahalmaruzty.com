@@ -218,9 +218,14 @@ export default function Home() {
         <Section id="work" label="selected work" title="Case studies">
           <Reveal className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {caseStudies.map((c) => (
-              <article key={c.title} className={`${card} ${c.wide ? "md:col-span-2" : ""}`}>
+              <article key={c.slug} className={`${card} relative ${c.wide ? "md:col-span-2" : ""}`}>
                 <p className="font-mono text-[13px] text-muted">{c.meta}</p>
-                <h3 className="text-xl font-semibold leading-snug">{c.title}</h3>
+                <h3 className="text-xl font-semibold leading-snug">
+                  {/* The ::after covers the card, so the whole card opens the case study. */}
+                  <a href={`/work/${c.slug}`} className="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent">
+                    {c.title}
+                  </a>
+                </h3>
                 <dl className="grid gap-2 text-[15px]">
                   <dt className="font-mono text-xs text-accent">problem</dt>
                   <dd className="text-muted">{c.problem}</dd>
@@ -229,8 +234,9 @@ export default function Home() {
                   <dt className="font-mono text-xs text-accent">result</dt>
                   <dd className="text-muted">{c.result}</dd>
                 </dl>
-                <div className="mt-auto pt-1">
+                <div className="mt-auto pt-1 flex flex-wrap items-end justify-between gap-3">
                   <Chips items={c.stack} />
+                  <span aria-hidden="true" className="font-mono text-[13px] text-accent">read the case study &rarr;</span>
                 </div>
               </article>
             ))}

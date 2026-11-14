@@ -105,17 +105,21 @@ export const earlyCareer = {
 };
 
 export type CaseStudy = {
+  slug: string;
   meta: string;
   title: string;
   problem: string;
   approach: string;
   result: string;
   stack: string[];
+  // Key decisions, shown on the case study's own page.
+  points: string[];
   wide?: boolean;
 };
 
 export const caseStudies: CaseStudy[] = [
   {
+    slug: "business-banking-platform",
     meta: "fintech · lead · 2021-2025",
     title: "A business banking platform from an empty repo",
     problem:
@@ -124,9 +128,19 @@ export const caseStudies: CaseStudy[] = [
       "Shaped the technical requirements, set up AWS and CI/CD myself, modular monolith on Nium for transfers and cards, KYC for people and KYB business-profile checks via Cynopsis Artemis.",
     result: "Production in 12 months, 100+ SMEs onboarded, team grown to 10.",
     stack: ["Next.js", "Node", "MongoDB", "AWS", "Nium"],
+    points: [
+      "Started from an idea and an empty repo, and shaped the technical requirements before any code existed.",
+      "Set up AWS and the CI/CD pipeline myself.",
+      "A modular monolith: one deployable for a small team, with clear module boundaries.",
+      "International transfers and virtual corporate cards built on Nium.",
+      "KYC for people, and KYB business-profile checks via Cynopsis Artemis.",
+      "Tenant-aware authentication across businesses.",
+      "Grew and mentored the team to 10 engineers.",
+    ],
     wide: true,
   },
   {
+    slug: "ai-assisted-delivery",
     meta: "ai · workflow · 2026",
     title: "Shipping with an AI-assisted delivery workflow",
     problem: "One API ticket used to take me 2-3 days, mostly testing it myself before I trusted it.",
@@ -135,24 +149,48 @@ export const caseStudies: CaseStudy[] = [
     result:
       "About 4x my old weekly output: 200+ tickets in 4 months. Each one now spans API, web and often mobile, with every case on recording.",
     stack: ["Claude Code", "Playwright", "PostgreSQL"],
+    points: [
+      "Before: about one API ticket every 2-3 days, most of it spent testing my own work.",
+      "Now: one ticket covers the API, the web app and often mobile.",
+      "A person signs off at each step.",
+      "Every change leaves tests and a recording of each case behind.",
+    ],
   },
   {
+    slug: "white-label-mobile-banking",
     meta: "banking · architect",
     title: "White-label mobile banking",
     problem: "Two banks, one platform, core banking and video KYC.",
     approach: "Independent modules, ISO 8583 core integration, Kafka events, Jitsi video calls.",
     result: "Shipped for 2 enterprise banks.",
     stack: ["FeathersJS", "Kotlin", "Kafka"],
+    points: [
+      "One platform shipped for two enterprise banks.",
+      "Independent modules per concern.",
+      "ISO 8583 integration with the core banking system.",
+      "Kafka events between services.",
+      "Video KYC calls on Jitsi.",
+      "FeathersJS services and Kotlin mobile apps.",
+    ],
   },
   {
+    slug: "never-double-charge",
     meta: "payments · backend · now",
     title: "Backends that never double-charge",
     problem: "Bank GIRO collections and refunds, plus migrations on data that can't be wrong.",
     approach: "Idempotency keys, queued retries, reconciliation; parallel-run validation before every cutover.",
     result: "100% data integrity across production migrations, zero-downtime releases.",
     stack: ["NestJS", "PostgreSQL", "Redis", "NSQ"],
+    points: [
+      "Idempotency keys, so a retried request returns the first result instead of charging again.",
+      "Queued retries instead of retrying inline.",
+      "Reconciliation against the bank.",
+      "Migrations run in parallel with the old path and are compared before cutover.",
+      "A timing-out query rewritten with a CTE, now under 100 ms.",
+    ],
   },
   {
+    slug: "ops-without-an-engineer",
     meta: "internal tools · now",
     title: "Ops answers \"what happened?\" without an engineer",
     problem: "Every stuck record or odd status meant pinging an engineer or PM.",
@@ -160,6 +198,12 @@ export const caseStudies: CaseStudy[] = [
       "17 Retool tools across the app's modules that show live status, triage the issue and retry failed processes.",
     result: "Operations and Customer Success reach a conclusion on their own.",
     stack: ["Retool", "PostgreSQL", "REST"],
+    points: [
+      "17 Retool tools across the app's modules.",
+      "Each one shows live status for its area.",
+      "Triage and retry of failed processes, built in.",
+      "Operations and Customer Success reach a conclusion without an engineer or PM.",
+    ],
   },
 ];
 

@@ -1,5 +1,8 @@
 // All page copy lives here, so a CV update does not touch layout code.
 
+// The address that serves the page directly; the bare domain 307-redirects here.
+export const siteUrl = "https://www.regahalmaruzty.com";
+
 export const profile = {
   name: "Rega Halma Ruzty",
   title: "Senior Backend Engineer",

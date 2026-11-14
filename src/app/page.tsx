@@ -12,7 +12,28 @@ import {
   projects,
   skills,
   stats,
+  siteUrl,
 } from "@/content/site";
+
+// Person structured data: helps search engines tie the site, GitHub and LinkedIn to one person.
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  url: `${siteUrl}/`,
+  jobTitle: profile.title,
+  description:
+    "Senior Backend Engineer with 9+ years in fintech, banking, healthcare and enterprise systems.",
+  email: `mailto:${profile.email}`,
+  address: { "@type": "PostalAddress", addressLocality: "Bandung", addressCountry: "ID" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "Padjadjaran University" },
+  hasCredential: [
+    { "@type": "EducationalOccupationalCredential", name: "MongoDB Certified DBA Associate (C100DBA)" },
+    { "@type": "EducationalOccupationalCredential", name: "MongoDB Certified Developer Associate (C100DEV)" },
+  ],
+  knowsAbout: ["Backend engineering", "Node.js", "TypeScript", "PostgreSQL", "Distributed systems", "Payments", "AI-assisted software delivery"],
+  sameAs: [profile.github, profile.linkedin],
+};
 
 const btn =
   "lift inline-flex items-center gap-2 min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-[border-color,transform,filter] duration-200 hover:-translate-y-px";
@@ -75,6 +96,10 @@ const navLinks = ["about", "experience", "work", "projects", "contact"];
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }}
+      />
       <nav className="sticky top-0 z-10 border-b border-line bg-bg/85 backdrop-blur">
         <div className="max-w-page mx-auto px-6 h-[60px] flex items-center justify-between">
           <a href="#top" className="font-mono text-sm">

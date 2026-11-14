@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { siteUrl } from "@/content/site";
 
 const parkinsans = localFont({
   src: "./fonts/Parkinsans[wght].ttf",
@@ -22,23 +23,20 @@ const description =
   "Senior Backend Engineer with 9+ years in fintech, banking and enterprise. Node.js, TypeScript, PostgreSQL, distributed systems, and AI-assisted delivery.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://regahalmaruzty.com"),
+  metadataBase: new URL(siteUrl),
+  alternates: { canonical: "/" },
   title: "Rega Halma Ruzty · Senior Backend Engineer",
   description,
   openGraph: {
     title: "Rega Halma Ruzty · Senior Backend Engineer",
     description,
-    url: "https://regahalmaruzty.com",
+    url: "/",
     siteName: "Rega Halma Ruzty",
-    images: [
-      {
-        url: "/rega.png",
-        width: 800,
-        height: 600,
-        alt: "Rega Halma Ruzty",
-      },
-    ],
+    type: "profile",
+    locale: "en_US",
+    // image comes from app/opengraph-image.tsx
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {

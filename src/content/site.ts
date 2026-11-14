@@ -2,6 +2,7 @@
 
 // The address that serves the page directly; the bare domain 307-redirects here.
 export const siteUrl = "https://www.regahalmaruzty.com";
+export const chickPenUrl = "https://chick-pen.regahalmaruzty.com";
 
 export const profile = {
   name: "Rega Halma Ruzty",
@@ -212,7 +213,7 @@ export type Project = {
   title: string;
   description: string;
   stack: string[];
-  code: string;
+  code?: string; // omitted for private repos
   live?: string;
 };
 
@@ -226,12 +227,11 @@ export const projects: Project[] = [
     code: "https://github.com/regahr/hierarchical-locations-api",
   },
   {
-    repo: "lf-animation-management",
-    title: "Lottie Animation Manager",
-    description: "Offline-first React client and GraphQL API for managing Lottie animations.",
-    stack: ["GraphQL Yoga", "React", "URQL", "Prisma"],
-    code: "https://github.com/regahr/lf-animation-management",
-    live: "https://lf-animation-management.vercel.app",
+    repo: "denrose",
+    title: "Denrose",
+    description: "Storefront for handmade clay earrings, with a CMS for the catalogue and a 3D clay earring.",
+    stack: ["Next.js 14", "Sanity", "Three.js"],
+    live: "https://denrose.store",
   },
   {
     repo: "doc-gen",
@@ -250,7 +250,7 @@ export const projects: Project[] = [
 ];
 
 export const moreProjects = [
-  { name: "denrose", note: "e-commerce, Next.js 14", href: "https://denrose.vercel.app" },
+  { name: "chick-pen", note: "the chicks from the about section, as a game", href: chickPenUrl },
   { name: "loop_station", note: "browser audio looper", href: "https://loop-station-nu.vercel.app" },
   {
     name: "fullstack-turborepo-starter",

@@ -175,7 +175,7 @@ export default function Home() {
             </p>
             <p>{about.closing}</p>
           </Reveal>
-          <ChickPen className="mt-8 w-full h-[200px] sm:h-[260px]" />
+          <ChickPen className="mt-8" />
         </Section>
 
         <Section id="experience" label="experience" title="Where I've worked">
@@ -247,20 +247,24 @@ export default function Home() {
           <ConceptShowcase />
         </Section>
 
-        <Section id="projects" label="projects" title="Open source">
+        <Section id="projects" label="projects" title="Side projects">
           <Reveal className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {projects.map((p) => (
               <article key={p.repo} className={card}>
                 <p className="font-mono text-[13px] text-muted">
-                  <span className="text-accent">~/</span>regahr/{p.repo}
+                  {/* Private repos show their domain instead of a GitHub path. */}
+                  <span className="text-accent">~/</span>
+                  {p.code ? `regahr/${p.repo}` : new URL(p.live ?? "").host}
                 </p>
                 <h3 className="text-xl font-semibold">{p.title}</h3>
                 <p className="text-muted text-[15px]">{p.description}</p>
                 <Chips items={p.stack} />
                 <div className="flex gap-[18px] font-mono text-[13px] mt-auto">
-                  <a href={p.code} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
-                    code &rarr;<span className="sr-only"> for {p.title}</span>
-                  </a>
+                  {p.code && (
+                    <a href={p.code} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
+                      code &rarr;<span className="sr-only"> for {p.title}</span>
+                    </a>
+                  )}
                   {p.live && (
                     <a href={p.live} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
                       live &rarr;<span className="sr-only"> demo of {p.title}</span>

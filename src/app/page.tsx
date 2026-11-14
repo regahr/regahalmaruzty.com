@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import TypingAnimation from "./components/TypingAnimation";
 import CodePuzzle from "./components/CodePuzzle";
 import Reveal from "./components/Reveal";
+import ChickPen from "./components/three/ChickPen";
+import RetryExplainer from "./components/three/RetryExplainer";
 import {
   about,
   caseStudies,
@@ -173,6 +175,7 @@ export default function Home() {
             </p>
             <p>{about.closing}</p>
           </Reveal>
+          <ChickPen className="mt-8 w-full h-[200px] sm:h-[260px]" />
         </Section>
 
         <Section id="experience" label="experience" title="Where I've worked">
@@ -231,6 +234,7 @@ export default function Home() {
                 </div>
               </article>
             ))}
+            <RetryExplainer />
           </Reveal>
         </Section>
 

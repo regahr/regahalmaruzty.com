@@ -76,6 +76,8 @@ textarea:focus-visible {
 
 /* Round glass buttons for the concept showcase (ui-ux-pro-max glassmorphism:
    10-20px blur, translucent fill, 1px light border, visible focus). */
+/* Hover/press use transform: scale, so never position these with a
+   translate (it would be replaced on hover and the button would jump). */
 .glass-btn {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);

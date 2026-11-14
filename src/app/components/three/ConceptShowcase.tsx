@@ -127,7 +127,7 @@ export default function ConceptShowcase() {
           type="button"
           onClick={() => goConcept(concept - 1)}
           aria-label="Previous concept"
-          className="glass-btn absolute left-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full hidden sm:grid place-items-center cursor-pointer"
+          className="glass-btn absolute left-0 inset-y-0 my-auto w-14 h-14 rounded-full hidden sm:grid place-items-center cursor-pointer"
         >
           <Chevron dir="left" />
         </button>
@@ -135,7 +135,7 @@ export default function ConceptShowcase() {
           type="button"
           onClick={() => goConcept(concept + 1)}
           aria-label="Next concept"
-          className="glass-btn absolute right-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full hidden sm:grid place-items-center cursor-pointer"
+          className="glass-btn absolute right-0 inset-y-0 my-auto w-14 h-14 rounded-full hidden sm:grid place-items-center cursor-pointer"
         >
           <Chevron dir="right" />
         </button>

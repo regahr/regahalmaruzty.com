@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const parkinsans = localFont({
@@ -9,9 +8,13 @@ const parkinsans = localFont({
   weight: "100 900",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+// Self-hosted (OFL, see fonts/JetBrainsMono-OFL.txt): next/font/google 14.2.x
+// fails on Vercel when Google serves font URLs without a file extension.
+const jetbrainsMono = localFont({
+  src: [
+    { path: "./fonts/jetbrains-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/jetbrains-mono-latin-500-normal.woff2", weight: "500", style: "normal" },
+  ],
   variable: "--font-jetbrains-mono",
 });
 

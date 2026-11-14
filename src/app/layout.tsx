@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const parkinsans = localFont({
@@ -8,23 +9,40 @@ const parkinsans = localFont({
   weight: "100 900",
 });
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
+});
+
+const description =
+  "Senior Backend Engineer with 9+ years in fintech, banking and enterprise. Node.js, TypeScript, PostgreSQL, distributed systems, and AI-assisted delivery.";
+
 export const metadata: Metadata = {
-  title: "Rega Halma Ruzty",
-  description: "Personal website of Rega",
+  metadataBase: new URL("https://regahalmaruzty.com"),
+  title: "Rega Halma Ruzty · Senior Backend Engineer",
+  description,
   openGraph: {
-    title: "Rega Halma Ruzty",
-    description: "Personal website of Rega showcasing my work and projects.",
-    url: "https://regahalmaruzty.com", // Replace with your actual URL
+    title: "Rega Halma Ruzty · Senior Backend Engineer",
+    description,
+    url: "https://regahalmaruzty.com",
     siteName: "Rega Halma Ruzty",
     images: [
       {
-        url: "https://regahalmaruzty.com/rega.png", // Replace with your actual image URL
+        url: "/rega.png",
         width: 800,
         height: 600,
-        alt: "My name",
+        alt: "Rega Halma Ruzty",
       },
     ],
-  }
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0b1120" },
+    { media: "(prefers-color-scheme: light)", color: "#fafaf9" },
+  ],
 };
 
 export default function RootLayout({
@@ -34,9 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${parkinsans.variable} antialiased`}
-      >
+      <body className={`${parkinsans.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

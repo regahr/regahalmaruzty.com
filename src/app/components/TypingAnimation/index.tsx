@@ -1,72 +1,63 @@
-import React, { useState, useEffect } from "react";
+"use client";
 
-import "./styles.css";
+import React, { useEffect, useState } from "react";
 
 interface TypingAnimationProps {
-  words: string[]; // Array of words to be typed
-  typingSpeed?: number; // Speed of typing in ms (default: 100ms)
-  deletingSpeed?: number; // Speed of deleting characters (default: 50ms)
-  delayBetweenWords?: number; // Delay before typing the next word (default: 1000ms)
+  words: string[]; // typed in order; the last word stays on screen
+  typingSpeed?: number;
+  deletingSpeed?: number;
+  delayBetweenWords?: number;
 }
 
+// `$ whoami → <word>` prompt. Screen readers get the full list once;
+// reduced-motion visitors see the final word with no animation.
 const TypingAnimation: React.FC<TypingAnimationProps> = ({
   words,
-  typingSpeed = 100,
-  deletingSpeed = 50,
-  delayBetweenWords = 1000,
+  typingSpeed = 60,
+  deletingSpeed = 25,
+  delayBetweenWords = 900,
 }) => {
-  const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
-  const [displayedText, setDisplayedText] = useState<string>("");
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const finalWord = words[words.length - 1];
+  const [wordIndex, setWordIndex] = useState(0);
+  const [text, setText] = useState(finalWord);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    const currentWord = words[currentWordIndex];
-    let timer: NodeJS.Timeout;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setText("");
+    setAnimate(true);
+  }, []);
+
+  useEffect(() => {
+    if (!animate) return;
+    const word = words[wordIndex];
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
     if (!isDeleting) {
-      if (displayedText.length < currentWord.length) {
-        // Typing character by character
-        timer = setTimeout(() => {
-          setDisplayedText(currentWord.slice(0, displayedText.length + 1));
-        }, typingSpeed);
-      } else if (currentWordIndex < words.length - 1) {
-        // Word is fully typed, wait before deleting
+      if (text.length < word.length) {
+        timer = setTimeout(() => setText(word.slice(0, text.length + 1)), typingSpeed);
+      } else if (wordIndex < words.length - 1) {
         timer = setTimeout(() => setIsDeleting(true), delayBetweenWords);
       }
+    } else if (text.length > 0) {
+      timer = setTimeout(() => setText(word.slice(0, text.length - 1)), deletingSpeed);
     } else {
-      if (displayedText.length > 0) {
-        // Deleting character by character
-        timer = setTimeout(() => {
-          setDisplayedText(currentWord.slice(0, displayedText.length - 1));
-        }, deletingSpeed);
-      } else {
-        // Move to the next word
-        setIsDeleting(false);
-        setCurrentWordIndex((prev) => prev + 1);
-      }
+      setIsDeleting(false);
+      setWordIndex((i) => i + 1);
     }
 
-    return () => clearTimeout(timer); // Cleanup timer on unmount
-  }, [
-    displayedText,
-    isDeleting,
-    currentWordIndex,
-    words,
-    typingSpeed,
-    deletingSpeed,
-    delayBetweenWords,
-  ]);
-
-  // Determine whether to show the cursor or the period
-  const isLastWordTyped =
-    currentWordIndex === words.length - 1 &&
-    displayedText === words[currentWordIndex];
+    return () => clearTimeout(timer);
+  }, [animate, text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords]);
 
   return (
-    <div className="font-mono text-2xl">
-      {displayedText}
-      <span className={"animate-blink"}>{isLastWordTyped ? "." : "|"}</span>
-    </div>
+    <p className="font-mono text-[15px] text-muted min-h-[1.6em]">
+      <span className="sr-only">{words.join(", ")}</span>
+      <span aria-hidden="true">
+        <span className="text-accent">$</span> whoami &rarr; {text}
+        <span className="caret" />
+      </span>
+    </p>
   );
 };
 

@@ -9,8 +9,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        bg: "var(--bg)",
+        surface: "var(--surface)",
+        line: "var(--line)",
+        fg: "var(--fg)",
+        muted: "var(--muted)",
+        accent: "var(--accent)",
+        "on-accent": "var(--on-accent)",
+      },
+      fontFamily: {
+        sans: ["var(--font-parkin-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-jetbrains-mono)", "ui-monospace", "monospace"],
+      },
+      maxWidth: {
+        page: "1040px",
       },
     },
   },

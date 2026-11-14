@@ -1,98 +1,112 @@
-import { useEffect, useRef, useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { puzzles } from "./puzzle";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs";
 
+// Same puzzle for everyone on a given day.
 const getPuzzleIndexForToday = () => {
-  const today = new Date();
-  const dateString = today.toISOString().split("T")[0]; // Get YYYY-MM-DD format
+  const dateString = new Date().toISOString().split("T")[0];
   let hash = 0;
   for (let i = 0; i < dateString.length; i++) {
     hash += dateString.charCodeAt(i);
   }
-  return hash % puzzles.length; // Ensure the index is within bounds
+  return hash % puzzles.length;
+};
+
+// Puzzle sources are indented for the source file; strip the common indent for display.
+const dedent = (code: string) => {
+  const lines = code.split("\n");
+  const indents = lines
+    .slice(1)
+    .filter((l) => l.trim())
+    .map((l) => l.match(/^ */)![0].length);
+  const cut = indents.length ? Math.min(...indents) : 0;
+  return [lines[0], ...lines.slice(1).map((l) => l.slice(Math.min(cut, l.match(/^ */)![0].length)))].join("\n");
+};
+
+const fileNameFor = (code: string) => {
+  const match = code.match(/function\s+(\w+)/);
+  return `${match ? match[1] : "puzzle"}.js`;
 };
 
 const CodePuzzle: React.FC = () => {
-  const currentPuzzle = useRef(puzzles[getPuzzleIndexForToday()]);
-  const [code, setCode] = useState(currentPuzzle.current.code);
+  // Picked after mount: the page is prerendered at build time, so choosing by
+  // date during render would differ between server HTML and the browser.
+  const [puzzle, setPuzzle] = useState<(typeof puzzles)[number] | null>(null);
+  const [code, setCode] = useState("");
+  useEffect(() => {
+    const p = puzzles[getPuzzleIndexForToday()];
+    setPuzzle(p);
+    setCode(dedent(p.code));
+  }, []);
   const [result, setResult] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
 
-  useEffect(() => {
-    setCode(currentPuzzle.current.code); // Reset code when the puzzle changes
-  }, [currentPuzzle]);
-
   const handleSubmit = () => {
+    if (!puzzle) return;
     try {
       const userFunction = new Function("return " + code)();
-
-      const output = userFunction(currentPuzzle.current.testInput);
-
-      if (output === currentPuzzle.current.expectedOutput) {
-        setResult("Correct!");
+      const output = userFunction(puzzle.testInput);
+      if (output === puzzle.expectedOutput) {
+        setResult("✓ correct. nice.");
         setIsCorrect(true);
       } else {
-        setResult("Incorrect. Try again!");
+        setResult(`✗ got ${JSON.stringify(output)}, expected ${JSON.stringify(puzzle.expectedOutput)}`);
         setIsCorrect(false);
       }
-    } catch (error) {
-      console.log(error);
-      setResult("Error in your code. Please fix it.");
+    } catch {
+      setResult("✗ syntax or runtime error. check your code.");
       setIsCorrect(false);
     }
   };
 
   const getHint = () => {
+    if (!puzzle) return;
     if (hintsUsed < 3) {
       setHintsUsed(hintsUsed + 1);
-      setResult(currentPuzzle.current.hint); // Use the hint from the current puzzle
+      setResult(`hint: ${puzzle.hint}`);
+      setIsCorrect(false);
     } else {
-      setResult("No more hints available.");
+      setResult("no more hints today.");
     }
   };
 
+  const btn =
+    "inline-flex items-center min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-colors cursor-pointer";
+
   return (
-    <div className="grid grid-rows">
-      <div className="flex text-left text-sm font-medium">
-        Co-zzle for the day!
+    <div className="bg-surface border border-line rounded-xl overflow-hidden max-w-[760px]">
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-line font-mono text-[13px] text-muted">
+        <span className="w-2.5 h-2.5 rounded-full bg-line" />
+        <span className="w-2.5 h-2.5 rounded-full bg-line" />
+        <span className="w-2.5 h-2.5 rounded-full bg-line" />
+        <span className="ml-2">{puzzle ? fileNameFor(puzzle.code) : "loading.js"}</span>
       </div>
-      <div className="flex text-left text-sm font-medium">
-        {currentPuzzle.current.description}
-      </div>
+      <p className="px-5 pt-4 text-[15px] text-muted min-h-[2.6em]">{puzzle?.description ?? "\u00a0"}</p>
       <Editor
         value={code}
         onValueChange={setCode}
-        highlight={(code) => highlight(code, languages.js, "javascript")}
-        padding={10}
-        style={{
-          fontFamily: '"Fira code", "Fira Mono", monospace',
-          fontSize: 12,
-          border: "1px solid #ddd",
-          borderRadius: "4px",
-          minHeight: "200px",
-        }}
+        highlight={(c) => highlight(c, languages.js, "javascript")}
+        padding={20}
+        textareaId="cozzle-editor"
+        aria-label="Puzzle code editor"
+        className="font-mono text-sm leading-[1.7] min-h-[160px]"
+        style={{ fontFamily: "var(--font-jetbrains-mono), ui-monospace, monospace" }}
       />
-      <button
-        onClick={handleSubmit}
-        className="mt-4 p-2 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded shadow-md hover:from-green-300 hover:to-blue-400 transition duration-300"
-      >
-        Submit
-      </button>
-      <button
-        onClick={getHint}
-        className="mt-2 p-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded shadow-md hover:from-yellow-300 hover:to-orange-400 transition duration-300"
-      >
-        Get Hint
-      </button>
-      {result && (
-        <div
-          className={`mt-2 ${isCorrect ? "text-green-500" : "text-red-500"}`}
-        >
+      <div className="flex flex-wrap items-center gap-3 px-5 pb-5">
+        <button type="button" onClick={handleSubmit} className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
+          run
+        </button>
+        <button type="button" onClick={getHint} className={`${btn} border-line text-fg hover:border-muted`}>
+          hint {hintsUsed > 0 ? `(${hintsUsed}/3)` : ""}
+        </button>
+        <p role="status" className={`font-mono text-[13px] ${isCorrect ? "text-accent" : "text-muted"}`}>
           {result}
-        </div>
-      )}
+        </p>
+      </div>
     </div>
   );
 };

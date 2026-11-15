@@ -15,6 +15,8 @@ export const profile = {
     rest: "across fintech, banking, healthcare and enterprise: Node.js, TypeScript, PostgreSQL, distributed systems, and the boring parts that keep them correct, like idempotency, retries and reconciliation.",
   },
   typingWords: [
+    "food reviewer",
+    "offlaner",
     "payments backend",
     "idempotency nerd",
     "engineering lead",

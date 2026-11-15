@@ -9,13 +9,20 @@ export function generateStaticParams() {
   return caseStudies.map((c) => ({ slug: c.slug }));
 }
 
+// Search results cut long descriptions; lead with the result and stop at a word.
+const clip = (text: string, max: number) => {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:.]$/, "")}…`;
+};
+
 const find = (slug: string) => caseStudies.find((c) => c.slug === slug);
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const c = find(params.slug);
   if (!c) return {};
   const title = `${c.title} · ${profile.name}`;
-  const description = `${c.problem} ${c.result}`;
+  const description = clip(`${c.result} ${c.problem}`, 160);
   const url = `/work/${c.slug}`;
   return {
     title,

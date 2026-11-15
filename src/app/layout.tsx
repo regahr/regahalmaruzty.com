@@ -21,7 +21,7 @@ const jetbrainsMono = localFont({
 });
 
 const description =
-  "Senior Backend Engineer with 9+ years in fintech, banking and enterprise. Node.js, TypeScript, PostgreSQL, distributed systems, and payments that are never wrong.";
+  "Senior Backend Engineer, 9+ years in fintech and banking. Node.js, TypeScript, PostgreSQL, distributed systems, and payments that are never wrong.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

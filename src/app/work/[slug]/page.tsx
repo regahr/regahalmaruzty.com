@@ -28,7 +28,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
 const chip = "font-mono text-xs px-2 py-[3px] border border-line rounded-md text-muted";
 const btn =
-  "lift inline-flex items-center gap-2 min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-[border-color,transform,filter] duration-200 hover:-translate-y-px";
+  "lift inline-flex items-center gap-2 min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-[border-color,transform,filter] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-px active:scale-[0.97]";
 
 export default function CaseStudyPage({ params }: { params: { slug: string } }) {
   const i = caseStudies.findIndex((c) => c.slug === params.slug);

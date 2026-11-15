@@ -4,7 +4,8 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 // Fades children in on first scroll into view. Without JS, or with reduced
 // motion, the content is simply visible: the hidden state is only added here.
-export default function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
+// With `stagger`, the children enter one after another instead of as one block.
+export default function Reveal({ children, className = "", stagger = false }: { children: ReactNode; className?: string; stagger?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function Reveal({ children, className = "" }: { children: ReactNo
   }, []);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={`${stagger ? "reveal-stagger " : ""}${className}`}>
       {children}
     </div>
   );

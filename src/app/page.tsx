@@ -34,15 +34,15 @@ const personJsonLd = {
     { "@type": "EducationalOccupationalCredential", name: "MongoDB Certified DBA Associate (C100DBA)" },
     { "@type": "EducationalOccupationalCredential", name: "MongoDB Certified Developer Associate (C100DEV)" },
   ],
-  knowsAbout: ["Backend engineering", "Node.js", "TypeScript", "PostgreSQL", "Distributed systems", "Payments", "AI-assisted software delivery"],
+  knowsAbout: ["Backend engineering", "Node.js", "TypeScript", "PostgreSQL", "Distributed systems", "Payments", "Idempotency", "Reconciliation"],
   sameAs: [profile.github, profile.linkedin],
 };
 
 const btn =
-  "lift inline-flex items-center gap-2 min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-[border-color,transform,filter] duration-200 hover:-translate-y-px";
+  "lift inline-flex items-center gap-2 min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-[border-color,transform,filter] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-px active:scale-[0.97]";
 const chip = "font-mono text-xs px-2 py-[3px] border border-line rounded-md text-muted";
 const card =
-  "lift bg-surface border border-line rounded-xl p-6 flex flex-col gap-3 transition-[border-color,transform] duration-200 hover:border-muted hover:-translate-y-0.5";
+  "lift bg-surface border border-line rounded-xl p-6 flex flex-col gap-3 transition-[border-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-muted hover:-translate-y-0.5 active:scale-[0.985]";
 
 function Section({ id, label, title, children }: { id: string; label: string; title: string; children: ReactNode }) {
   return (
@@ -95,6 +95,11 @@ const Icon = {
 };
 
 const navLinks = ["about", "experience", "work", "projects", "contact"];
+const phoneNavLinks = [
+  { id: "work", label: "work" },
+  { id: "how", label: "how" },
+  { id: "contact", label: "contact" },
+];
 
 export default function Home() {
   return (
@@ -108,6 +113,16 @@ export default function Home() {
           <a href="#top" className="font-mono text-sm">
             <span className="text-accent">~/</span>rega
           </a>
+          {/* Phones: a short row, so the long page still has jump links. */}
+          <ul className="flex sm:hidden gap-4 font-mono text-[13px]">
+            {phoneNavLinks.map((l) => (
+              <li key={l.id}>
+                <a href={`#${l.id}`} className="inline-flex items-center min-h-[44px] text-muted active:text-fg">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
           <ul className="hidden sm:flex gap-6 font-mono text-[13px]">
             {navLinks.map((l) => (
               <li key={l}>
@@ -153,15 +168,15 @@ export default function Home() {
         </header>
 
         <Section id="impact" label="impact" title="Numbers, not adjectives">
-          <Reveal className="grid grid-cols-1 min-[421px]:grid-cols-2 md:grid-cols-3 gap-px bg-line border border-line rounded-xl overflow-hidden">
+          <Reveal className="grid grid-cols-2 md:grid-cols-3 gap-px bg-line border border-line rounded-xl overflow-hidden">
             {stats.map((s) => (
-              <div key={s.label} className="bg-surface px-6 py-7">
-                <div className="font-mono text-[34px] font-medium tracking-tight">
+              <div key={s.label} className="bg-surface px-4 py-5 sm:px-6 sm:py-7">
+                <div className="font-mono text-[28px] sm:text-[34px] font-medium tracking-tight">
                   {s.prefix && <span className="text-accent">{s.prefix}</span>}
                   {s.value}
                   {s.unit && <span className="text-accent">{s.unit}</span>}
                 </div>
-                <p className="text-muted text-[15px] mt-1">{s.label}</p>
+                <p className="text-muted text-[14px] sm:text-[15px] mt-1">{s.label}</p>
               </div>
             ))}
           </Reveal>
@@ -196,7 +211,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold mt-0.5 mb-2">
                     {r.title} <span className="text-muted font-medium">@ {r.company}</span>
                   </h3>
-                  <ul className="list-disc pl-[18px] text-muted marker:text-line">
+                  <ul className="list-disc pl-[18px] text-muted marker:text-muted">
                     {r.points.map((p) => (
                       <li key={p} className="mb-1">
                         {p}
@@ -217,7 +232,7 @@ export default function Home() {
         </Section>
 
         <Section id="work" label="selected work" title="Case studies">
-          <Reveal className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Reveal stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {caseStudies.map((c) => (
               <article key={c.slug} className={`${card} relative ${c.wide ? "md:col-span-2" : ""}`}>
                 <p className="font-mono text-[13px] text-muted">{c.meta}</p>
@@ -235,7 +250,7 @@ export default function Home() {
                   <dt className="font-mono text-xs text-accent">result</dt>
                   <dd className="text-muted">{c.result}</dd>
                 </dl>
-                <div className="mt-auto pt-1 flex flex-wrap items-end justify-between gap-3">
+                <div className="mt-auto pt-1 grid gap-3">
                   <Chips items={c.stack} />
                   <span aria-hidden="true" className="font-mono text-[13px] text-accent">read the case study &rarr;</span>
                 </div>
@@ -249,7 +264,7 @@ export default function Home() {
         </Section>
 
         <Section id="projects" label="projects" title="Side projects">
-          <Reveal className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Reveal stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {projects.map((p) => (
               <article key={p.repo} className={card}>
                 <p className="font-mono text-[13px] text-muted">
@@ -302,6 +317,17 @@ export default function Home() {
         <Section id="cozzle" label="co-zzle" title="Puzzle of the day">
           <CodePuzzle />
         </Section>
+        {/* Closing ask: the one thing a hiring manager should do after reading. */}
+        <section aria-labelledby="hire-h" className="border-t border-line py-14 md:py-16">
+          <div className="max-w-page mx-auto px-6 flex flex-wrap items-center justify-between gap-5">
+            <h2 id="hire-h" className="text-[22px] md:text-[26px] font-semibold tracking-tight">
+              Hiring for senior backend or payments?
+            </h2>
+            <a href={`mailto:${profile.email}`} className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
+              {Icon.mail}Email me
+            </a>
+          </div>
+        </section>
       </main>
 
       <footer id="contact" className="border-t border-line pt-10 pb-14 font-mono text-[13px] text-muted">

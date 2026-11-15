@@ -8,17 +8,16 @@ export const profile = {
   name: "Rega Halma Ruzty",
   title: "Senior Backend Engineer",
   titleSuffix: "former Engineering Lead",
-  tagline: "product-minded. backend-deep. building ai-assisted delivery workflows.",
+  tagline: "product-minded. backend-deep. ships fast without breaking money.",
   lede: {
     lead: "I build backend systems that move money and can't afford to be wrong.",
     years: "9+ years",
     rest: "across fintech, banking, healthcare and enterprise: Node.js, TypeScript, PostgreSQL, distributed systems, and the boring parts that keep them correct, like idempotency, retries and reconciliation.",
   },
   typingWords: [
-    "food reviewer",
-    "offlaner",
-    "product engineer",
-    "ai workflow builder",
+    "payments backend",
+    "idempotency nerd",
+    "engineering lead",
     "senior backend engineer",
   ],
   email: "rega.hruzty@gmail.com",
@@ -35,8 +34,8 @@ export const stats: Stat[] = [
   { value: "12", unit: "mo", label: "empty repo to production, business banking platform" },
   { value: "100", unit: "+", label: "enterprise SMEs onboarded" },
   { value: "10", label: "engineers, team scaled and mentored" },
-  { prefix: "<", value: "100", unit: "ms", label: "timing-out query after a CTE rewrite" },
-  { prefix: "~", value: "4", unit: "x", label: "weekly ticket output with my AI-assisted workflow" },
+  { prefix: "<", value: "100", unit: "ms", label: "a query that used to time out, after a CTE rewrite" },
+  { prefix: "~", value: "4", unit: "x", label: "weekly ticket output, from my own delivery process" },
 ];
 
 export const about = {
@@ -141,12 +140,12 @@ export const caseStudies: CaseStudy[] = [
     wide: true,
   },
   {
-    slug: "ai-assisted-delivery",
-    meta: "ai · workflow · 2026",
-    title: "Shipping with an AI-assisted delivery workflow",
+    slug: "shipping-faster",
+    meta: "delivery · process · 2026",
+    title: "Shipping full-stack tickets 4x faster",
     problem: "One API ticket used to take me 2-3 days, mostly testing it myself before I trusted it.",
     approach:
-      "My own workflow that pairs AI agents with human sign-off at each step, and leaves tests and recorded evidence behind every change.",
+      "A tested, recorded delivery process I built, with my sign-off at each step and evidence behind every change.",
     result:
       "About 4x my old weekly output: 200+ tickets in 4 months. Each one now spans API, web and often mobile, with every case on recording.",
     stack: ["Claude Code", "Playwright", "PostgreSQL"],
@@ -180,7 +179,7 @@ export const caseStudies: CaseStudy[] = [
     title: "Backends that never double-charge",
     problem: "Bank GIRO collections and refunds, plus migrations on data that can't be wrong.",
     approach: "Idempotency keys, queued retries, reconciliation; parallel-run validation before every cutover.",
-    result: "100% data integrity across production migrations, zero-downtime releases.",
+    result: "100% data integrity across production migrations, each one validated by a parallel run before cutover. Zero-downtime releases.",
     stack: ["NestJS", "PostgreSQL", "Redis", "NSQ"],
     points: [
       "Idempotency keys, so a retried request returns the first result instead of charging again.",
@@ -265,6 +264,6 @@ export const skills: { group: string; items: string[] }[] = [
   { group: "distributed", items: ["NSQ", "Kafka", "idempotency", "distributed locks", "reconciliation"] },
   { group: "cloud & ops", items: ["AWS ECS/EC2/S3", "Docker", "GitHub Actions", "Grafana"] },
   { group: "frontend", items: ["React", "Next.js", "TypeScript"] },
-  { group: "ai-assisted", items: ["Claude Code", "Codex", "workflow orchestration"] },
+  { group: "tooling", items: ["Claude Code", "Codex", "workflow orchestration"] },
   { group: "certified", items: ["MongoDB C100DBA", "MongoDB C100DEV"] },
 ];

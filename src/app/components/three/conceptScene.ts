@@ -175,7 +175,7 @@ export function mountConcepts(canvas: HTMLCanvasElement, { animate }: MountOptio
 
   // ---- State ------------------------------------------------------------------------
   let conceptIdx = 0;
-  let variant: VariantKey = "right";
+  let variant: VariantKey = "naive"; // matches ConceptShowcase's first state
   let step = -1;
   let elapsed = 0;
   let flights: Flight[] = [];
@@ -303,6 +303,9 @@ export function mountConcepts(canvas: HTMLCanvasElement, { animate }: MountOptio
       stage.handle.dispose();
     },
     show(nextConcept, nextVariant, nextStep, animateStep) {
+      // Mount already built this exact state; React calls show() again when
+      // the scene reports ready, so skip the rebuild.
+      if (nextConcept === conceptIdx && nextVariant === variant && nextStep === step) return;
       conceptIdx = nextConcept;
       variant = nextVariant;
       step = nextStep;

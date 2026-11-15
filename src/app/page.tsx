@@ -4,6 +4,7 @@ import CodePuzzle from "./components/CodePuzzle";
 import Reveal from "./components/Reveal";
 import ChickPen from "./components/three/ChickPen";
 import ConceptShowcase from "./components/three/ConceptShowcase";
+import PerfReadout from "./components/three/PerfReadout";
 import {
   about,
   caseStudies,
@@ -323,6 +324,7 @@ export default function Home() {
           </span>
         </div>
       </footer>
+      <PerfReadout />
     </>
   );
 }

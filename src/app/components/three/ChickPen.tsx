@@ -2,6 +2,7 @@
 
 import { useLazyScene } from "./useLazyScene";
 import { chickPenUrl } from "@/content/site";
+import ScenePoster from "./ScenePoster";
 
 const load = () => import("./chickScene").then((m) => m.mountChicks);
 
@@ -15,13 +16,18 @@ const ExternalIcon = (
 // full game is real content, so it sits outside the hidden part and stays
 // even when WebGL is unavailable.
 export default function ChickPen({ className = "" }: { className?: string }) {
-  const { wrapRef, canvasRef, status } = useLazyScene(load);
+  const { wrapRef, canvasRef, status } = useLazyScene(load, "chick pen");
   const live = status !== "unsupported";
+  const ready = status === "live";
   return (
     <div className={className}>
       {live && (
-        <div ref={wrapRef} aria-hidden="true" className="w-full h-[200px] sm:h-[260px]">
-          <canvas ref={canvasRef} className="block w-full h-full touch-pan-y" />
+        <div ref={wrapRef} aria-hidden="true" className="relative w-full h-[200px] sm:h-[260px]">
+          <ScenePoster name="chick" live={ready} />
+          <canvas
+            ref={canvasRef}
+            className={`relative block w-full h-full touch-pan-y transition-opacity duration-300 motion-reduce:transition-none ${ready ? "opacity-100" : "opacity-0"}`}
+          />
         </div>
       )}
       <div className="mt-1 flex flex-wrap items-center justify-between gap-x-4 font-mono text-xs text-muted">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type KeyboardEvent } from "react";
 import { useLazyScene } from "./useLazyScene";
+import ScenePoster from "./ScenePoster";
 import { CONCEPTS } from "./concepts";
 import type { ConceptHandle, VariantKey } from "./conceptScene";
 
@@ -17,7 +18,7 @@ const Chevron = ({ dir }: { dir: "left" | "right" }) => (
 // Captions, controls and concept switching are plain HTML, so the showcase
 // works with a keyboard and a screen reader; the 3D view only illustrates.
 export default function ConceptShowcase() {
-  const { wrapRef, canvasRef, handleRef, status } = useLazyScene<ConceptHandle>(load);
+  const { wrapRef, canvasRef, handleRef, status } = useLazyScene<ConceptHandle>(load, "concepts");
   const [concept, setConcept] = useState(0);
   const [variant, setVariant] = useState<VariantKey>("naive");
   const [step, setStep] = useState(-1);
@@ -119,8 +120,12 @@ export default function ConceptShowcase() {
       {/* Side gutters (desktop) keep the round buttons off the stations. */}
       <div className="relative sm:px-16">
         {status !== "unsupported" && (
-          <div ref={wrapRef} aria-hidden="true" className="w-full aspect-[16/10] sm:aspect-[16/7] md:aspect-[3/1]">
-            <canvas ref={canvasRef} className="block w-full h-full touch-pan-y" />
+          <div ref={wrapRef} aria-hidden="true" aria-busy={status === "pending"} className="relative w-full aspect-[16/10] sm:aspect-[16/7] md:aspect-[3/1]">
+            <ScenePoster name="concepts" live={status === "live"} />
+            <canvas
+              ref={canvasRef}
+              className={`relative block w-full h-full touch-pan-y transition-opacity duration-300 motion-reduce:transition-none ${status === "live" ? "opacity-100" : "opacity-0"}`}
+            />
           </div>
         )}
         <button

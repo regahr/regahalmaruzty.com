@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import TypingAnimation from "./components/TypingAnimation";
 import CodePuzzle from "./components/CodePuzzle";
 import Reveal from "./components/Reveal";
+import { TrackedLink } from "./components/Track";
 import ChickPen from "./components/three/ChickPen";
 import ConceptShowcase from "./components/three/ConceptShowcase";
 import PerfReadout from "./components/three/PerfReadout";
@@ -151,12 +152,12 @@ export default function Home() {
               {profile.lede.rest}
             </p>
             <div className="flex flex-wrap gap-3 mt-9">
-              <a href={profile.cv} download className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
+              <TrackedLink kind="cv" from="home-hero" href={profile.cv} download className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
                 {Icon.download}Download CV
-              </a>
-              <a href={`mailto:${profile.email}`} className={`${btn} border-line hover:border-muted`}>
+              </TrackedLink>
+              <TrackedLink kind="email" from="home-hero" href={`mailto:${profile.email}`} className={`${btn} border-line hover:border-muted`}>
                 {Icon.mail}Email
-              </a>
+              </TrackedLink>
               <a href={profile.github} target="_blank" rel="noopener noreferrer" className={`${btn} border-line hover:border-muted`}>
                 {Icon.github}GitHub
               </a>
@@ -318,24 +319,24 @@ export default function Home() {
           <CodePuzzle />
         </Section>
         {/* Closing ask: the one thing a hiring manager should do after reading. */}
-        <section aria-labelledby="hire-h" className="border-t border-line py-14 md:py-16">
+        <section id="contact" aria-labelledby="hire-h" className="border-t border-line py-14 md:py-16 scroll-mt-16">
           <div className="max-w-page mx-auto px-6 flex flex-wrap items-center justify-between gap-5">
             <h2 id="hire-h" className="text-[22px] md:text-[26px] font-semibold tracking-tight">
               Hiring for senior backend or payments?
             </h2>
-            <a href={`mailto:${profile.email}`} className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
+            <TrackedLink kind="email" from="home-hire" href={`mailto:${profile.email}`} className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
               {Icon.mail}Email me
-            </a>
+            </TrackedLink>
           </div>
         </section>
       </main>
 
-      <footer id="contact" className="border-t border-line pt-10 pb-14 font-mono text-[13px] text-muted">
+      <footer className="border-t border-line pt-10 pb-14 font-mono text-[13px] text-muted">
         <div className="max-w-page mx-auto px-6 flex flex-wrap justify-between gap-4">
           <span>
-            <a href={`mailto:${profile.email}`} className="hover:text-accent">
+            <TrackedLink kind="email" from="home-footer" href={`mailto:${profile.email}`} className="hover:text-accent">
               {profile.email}
-            </a>{" "}
+            </TrackedLink>{" "}
             · {profile.location}
           </span>
           <span>

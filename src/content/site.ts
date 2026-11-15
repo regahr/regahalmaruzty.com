@@ -14,10 +14,11 @@ export const profile = {
     years: "9+ years",
     rest: "across fintech, banking, healthcare and enterprise: Node.js, TypeScript, PostgreSQL, distributed systems, and the boring parts that keep them correct, like idempotency, retries and reconciliation.",
   },
+  // Opens on the work; the personal words stay in the middle of the loop.
   typingWords: [
+    "payments backend",
     "food reviewer",
     "offlaner",
-    "payments backend",
     "idempotency nerd",
     "engineering lead",
     "senior backend engineer",

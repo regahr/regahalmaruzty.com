@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
+import { RefTracker } from "./components/Track";
 import "./globals.css";
 import { siteUrl } from "@/content/site";
 
@@ -58,6 +59,7 @@ export default function RootLayout({
         {children}
         {/* Vercel Web Analytics: cookieless page views. Starts counting once Analytics is enabled for the project. */}
         <Analytics />
+        <RefTracker />
       </body>
     </html>
   );

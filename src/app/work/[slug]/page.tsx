@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { caseStudies, profile, siteUrl } from "@/content/site";
+import { TrackedLink } from "../../components/Track";
 
 // One static page per case study, so each has its own URL to share and index.
 export const dynamicParams = false;
@@ -79,9 +80,14 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
           <a href="/">
             <span className="text-accent">~/</span>rega
           </a>
-          <a href="/#work" className="text-[13px] text-muted hover:text-fg transition-colors">
-            &larr; all case studies
-          </a>
+          <div className="flex items-center gap-5 text-[13px]">
+            <a href="/#work" className="inline-flex items-center min-h-[44px] text-muted hover:text-fg transition-colors">
+              &larr; <span className="hidden sm:inline">&nbsp;all case studies</span><span className="sm:hidden">&nbsp;work</span>
+            </a>
+            <TrackedLink kind="email" from={`case-${c.slug}-nav`} href={`mailto:${profile.email}`} className="inline-flex items-center min-h-[44px] text-accent hover:underline underline-offset-4">
+              email me
+            </TrackedLink>
+          </div>
         </div>
       </nav>
 
@@ -91,6 +97,11 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
             {"// "}case study {String(i + 1).padStart(2, "0")}/{String(caseStudies.length).padStart(2, "0")} · {c.meta}
           </p>
           <h1 className="text-[32px] md:text-[44px] leading-[1.1] font-semibold tracking-tight">{c.title}</h1>
+          {/* The result leads: a hiring manager arriving from a link sees the outcome first. */}
+          <div className="mt-7 border-l-2 border-accent pl-4 sm:pl-5">
+            <p className="font-mono text-xs text-accent mb-1.5">result</p>
+            <p className="text-[21px] sm:text-[24px] leading-snug font-medium text-fg">{c.result}</p>
+          </div>
           <dl className="mt-10 grid gap-6 text-[17px] leading-relaxed">
             <div>
               <dt className="font-mono text-xs text-accent mb-1">problem</dt>
@@ -99,10 +110,6 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
             <div>
               <dt className="font-mono text-xs text-accent mb-1">approach</dt>
               <dd>{c.approach}</dd>
-            </div>
-            <div>
-              <dt className="font-mono text-xs text-accent mb-1">result</dt>
-              <dd>{c.result}</dd>
             </div>
           </dl>
 
@@ -136,12 +143,12 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
           )}
 
           <div className="mt-12 flex flex-wrap gap-3">
-            <a href={`mailto:${profile.email}`} className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
+            <TrackedLink kind="email" from={`case-${c.slug}`} href={`mailto:${profile.email}`} className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
               Talk about this work
-            </a>
-            <a href={profile.cv} download className={`${btn} border-line hover:border-muted`}>
+            </TrackedLink>
+            <TrackedLink kind="cv" from={`case-${c.slug}`} href={profile.cv} download className={`${btn} border-line hover:border-muted`}>
               Download CV
-            </a>
+            </TrackedLink>
           </div>
         </article>
 
@@ -160,9 +167,9 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
       <footer className="border-t border-line pt-10 pb-14 font-mono text-[13px] text-muted">
         <div className="max-w-page mx-auto px-6 flex flex-wrap justify-between gap-4">
           <span>
-            <a href={`mailto:${profile.email}`} className="hover:text-accent">
+            <TrackedLink kind="email" from={`case-${c.slug}-footer`} href={`mailto:${profile.email}`} className="hover:text-accent">
               {profile.email}
-            </a>{" "}
+            </TrackedLink>{" "}
             · {profile.location}
           </span>
           <a href="/" className="hover:text-accent">

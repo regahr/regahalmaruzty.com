@@ -176,6 +176,9 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
             regahalmaruzty.com
           </a>
         </div>
+        <p className="max-w-page mx-auto px-6 mt-4 text-[12px] text-muted">
+          No cookies. Anonymous page counts via Vercel Analytics.
+        </p>
       </footer>
     </>
   );

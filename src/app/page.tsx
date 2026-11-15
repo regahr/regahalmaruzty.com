@@ -350,6 +350,9 @@ export default function Home() {
             · built with next.js
           </span>
         </div>
+        <p className="max-w-page mx-auto px-6 mt-4 text-[12px] text-muted">
+          No cookies. Anonymous page counts via Vercel Analytics.
+        </p>
       </footer>
       <PerfReadout />
     </>

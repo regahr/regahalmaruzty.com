@@ -50,13 +50,33 @@ const TypingAnimation: React.FC<TypingAnimationProps> = ({
     return () => clearTimeout(timer);
   }, [animate, text, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords]);
 
+  // WCAG 2.2.2: the loop runs longer than 5 s, so a tap or click skips to the
+  // final word, and the caret stops blinking once the last word is typed.
+  const done = !animate || (wordIndex === words.length - 1 && text === finalWord);
+  const skip = () => {
+    setAnimate(false);
+    setIsDeleting(false);
+    setWordIndex(words.length - 1);
+    setText(finalWord);
+  };
+
+  const line = (
+    <span aria-hidden="true">
+      <span className="text-accent">$</span> whoami &rarr; {text}
+      <span className={done ? "caret caret-done" : "caret"} />
+    </span>
+  );
+
   return (
     <p className="font-mono text-[15px] text-muted min-h-[1.6em]">
       <span className="sr-only">{words.join(", ")}</span>
-      <span aria-hidden="true">
-        <span className="text-accent">$</span> whoami &rarr; {text}
-        <span className="caret" />
-      </span>
+      {done ? (
+        line
+      ) : (
+        <button type="button" onClick={skip} aria-label="Skip the typing animation" className="text-left cursor-pointer">
+          {line}
+        </button>
+      )}
     </p>
   );
 };

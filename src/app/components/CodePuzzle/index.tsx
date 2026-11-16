@@ -75,7 +75,7 @@ const CodePuzzle: React.FC = () => {
   };
 
   const btn =
-    "inline-flex items-center min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-colors cursor-pointer";
+    "inline-flex items-center min-h-[44px] px-[18px] rounded-lg font-mono text-sm border transition-[color,background-color,border-color,transform] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] cursor-pointer";
 
   return (
     <div className="bg-surface border border-line rounded-xl overflow-hidden max-w-[760px]">

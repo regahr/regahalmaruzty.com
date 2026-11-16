@@ -153,11 +153,11 @@ export default function CaseStudyPage({ params }: { params: { slug: string } }) 
         </article>
 
         <nav aria-label="More case studies" className="mt-16 pt-8 border-t border-line grid sm:grid-cols-2 gap-4 font-mono text-sm">
-          <a href={`/work/${prev.slug}`} className="group">
+          <a href={`/work/${prev.slug}`} className="group transition-opacity duration-150 active:opacity-70">
             <span className="block text-xs text-muted mb-1">&larr; previous</span>
             <span className="group-hover:text-accent transition-colors">{prev.title}</span>
           </a>
-          <a href={`/work/${next.slug}`} className="group sm:text-right">
+          <a href={`/work/${next.slug}`} className="group transition-opacity duration-150 active:opacity-70 sm:text-right">
             <span className="block text-xs text-muted mb-1">next &rarr;</span>
             <span className="group-hover:text-accent transition-colors">{next.title}</span>
           </a>

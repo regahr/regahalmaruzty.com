@@ -68,6 +68,11 @@ textarea:focus-visible {
   animation: blink 1s steps(1) infinite;
 }
 
+/* Three more blinks after the last word, then a steady caret (WCAG 2.2.2). */
+.caret-done {
+  animation: blink 1s steps(1) 3;
+}
+
 @keyframes blink {
   50% {
     opacity: 0;

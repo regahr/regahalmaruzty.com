@@ -121,6 +121,24 @@ export type CaseStudy = {
 };
 
 export const caseStudies: CaseStudy[] = [
+  // Payments proof first: it backs the headline claim.
+  {
+    slug: "never-double-charge",
+    meta: "payments · backend · now",
+    title: "Backends that never double-charge",
+    problem: "Bank GIRO collections and refunds, plus migrations on data that can't be wrong.",
+    approach: "Idempotency keys, queued retries, reconciliation; parallel-run validation before every cutover.",
+    result: "100% data integrity across production migrations, each one validated by a parallel run before cutover. Zero-downtime releases.",
+    stack: ["NestJS", "PostgreSQL", "Redis", "NSQ"],
+    points: [
+      "Idempotency keys, so a retried request returns the first result instead of charging again.",
+      "Queued retries instead of retrying inline.",
+      "Reconciliation against the bank.",
+      "Migrations run in parallel with the old path and are compared before cutover.",
+      "A timing-out query rewritten with a CTE, now under 100 ms.",
+    ],
+    wide: true,
+  },
   {
     slug: "business-banking-platform",
     meta: "fintech · lead · 2021-2025",
@@ -139,24 +157,6 @@ export const caseStudies: CaseStudy[] = [
       "KYC for people, and KYB business-profile checks via Cynopsis Artemis.",
       "Tenant-aware authentication across businesses.",
       "Grew and mentored the team to 10 engineers.",
-    ],
-    wide: true,
-  },
-  {
-    slug: "shipping-faster",
-    meta: "delivery · process · 2026",
-    title: "Shipping full-stack tickets 4x faster",
-    problem: "One API ticket used to take me 2-3 days, mostly testing it myself before I trusted it.",
-    approach:
-      "A tested, recorded delivery process I built, with my sign-off at each step and evidence behind every change.",
-    result:
-      "About 4x my old weekly output: 200+ tickets in 4 months. Each one now spans API, web and often mobile, with every case on recording.",
-    stack: ["Claude Code", "Playwright", "PostgreSQL"],
-    points: [
-      "Before: about one API ticket every 2-3 days, most of it spent testing my own work.",
-      "Now: one ticket covers the API, the web app and often mobile.",
-      "A person signs off at each step.",
-      "Every change leaves tests and a recording of each case behind.",
     ],
   },
   {
@@ -177,19 +177,20 @@ export const caseStudies: CaseStudy[] = [
     ],
   },
   {
-    slug: "never-double-charge",
-    meta: "payments · backend · now",
-    title: "Backends that never double-charge",
-    problem: "Bank GIRO collections and refunds, plus migrations on data that can't be wrong.",
-    approach: "Idempotency keys, queued retries, reconciliation; parallel-run validation before every cutover.",
-    result: "100% data integrity across production migrations, each one validated by a parallel run before cutover. Zero-downtime releases.",
-    stack: ["NestJS", "PostgreSQL", "Redis", "NSQ"],
+    slug: "shipping-faster",
+    meta: "delivery · process · 2026",
+    title: "Shipping full-stack tickets 4x faster",
+    problem: "One API ticket used to take me 2-3 days, mostly testing it myself before I trusted it.",
+    approach:
+      "A tested, recorded delivery process I built, with my sign-off at each step and evidence behind every change.",
+    result:
+      "About 4x my old weekly output: 200+ tickets in 4 months. Each one now spans API, web and often mobile, with every case on recording.",
+    stack: ["Claude Code", "Playwright", "PostgreSQL"],
     points: [
-      "Idempotency keys, so a retried request returns the first result instead of charging again.",
-      "Queued retries instead of retrying inline.",
-      "Reconciliation against the bank.",
-      "Migrations run in parallel with the old path and are compared before cutover.",
-      "A timing-out query rewritten with a CTE, now under 100 ms.",
+      "Before: about one API ticket every 2-3 days, most of it spent testing my own work.",
+      "Now: one ticket covers the API, the web app and often mobile.",
+      "A person signs off at each step.",
+      "Every change leaves tests and a recording of each case behind.",
     ],
   },
   {

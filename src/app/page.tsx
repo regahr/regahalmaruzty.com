@@ -45,6 +45,9 @@ const chip = "font-mono text-xs px-2 py-[3px] border border-line rounded-md text
 const card =
   "lift bg-surface border border-line rounded-xl p-6 flex flex-col gap-3 transition-[border-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-muted hover:-translate-y-0.5 active:scale-[0.985]";
 
+// Side-project cards are not links (only "code" and "live" inside are), so no lift or press.
+const cardStatic = "bg-surface border border-line rounded-xl p-6 flex flex-col gap-3";
+
 function Section({ id, label, title, children }: { id: string; label: string; title: string; children: ReactNode }) {
   return (
     <section id={id} aria-labelledby={`${id}-h`} className="border-t border-line py-16 md:py-[88px] scroll-mt-16">
@@ -137,7 +140,7 @@ export default function Home() {
       </nav>
 
       <main id="top">
-        <header className="pt-20 pb-16 md:pt-28 md:pb-20">
+        <header className="pt-12 sm:pt-20 pb-16 md:pt-28 md:pb-20">
           <div className="max-w-page mx-auto px-6">
             <TypingAnimation words={profile.typingWords} />
             <h1 className="text-[40px] sm:text-[52px] md:text-[64px] leading-[1.05] font-semibold tracking-[-0.02em] mt-5 mb-2">
@@ -147,11 +150,13 @@ export default function Home() {
               <span className="text-fg">{profile.title}</span> · {profile.titleSuffix}
             </p>
             <p className="font-mono text-sm text-accent mt-2.5">{profile.tagline}</p>
-            <p className="max-w-[62ch] mt-6 text-muted">
+            {/* Phones: buttons before the lede, so CV and Email sit on the first screen. */}
+            <div className="flex flex-col">
+            <p className="order-2 sm:order-1 max-w-[62ch] mt-6 text-muted">
               {profile.lede.lead} <strong className="text-fg font-medium">{profile.lede.years}</strong>{" "}
               {profile.lede.rest}
             </p>
-            <div className="flex flex-wrap gap-3 mt-9">
+            <div className="order-1 sm:order-2 flex flex-wrap gap-3 mt-6 sm:mt-9">
               <TrackedLink kind="cv" from="home-hero" href={profile.cv} download className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}>
                 {Icon.download}Download CV
               </TrackedLink>
@@ -164,6 +169,7 @@ export default function Home() {
               <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className={`${btn} border-line hover:border-muted`}>
                 {Icon.linkedin}LinkedIn
               </a>
+            </div>
             </div>
           </div>
         </header>
@@ -181,6 +187,10 @@ export default function Home() {
               </div>
             ))}
           </Reveal>
+        </Section>
+
+        <Section id="how" label="how it works" title="The patterns behind the work">
+          <ConceptShowcase />
         </Section>
 
         <Section id="about" label="about" title="I didn't start in software">
@@ -210,7 +220,7 @@ export default function Home() {
                     {r.period} · {r.place}
                   </p>
                   <h3 className="text-xl font-semibold mt-0.5 mb-2">
-                    {r.title} <span className="text-muted font-medium">@ {r.company}</span>
+                    <span className="whitespace-nowrap">{r.title}</span> <span className="text-muted font-medium whitespace-nowrap">@ {r.company}</span>
                   </h3>
                   <ul className="list-disc pl-[18px] text-muted marker:text-muted">
                     {r.points.map((p) => (
@@ -260,14 +270,10 @@ export default function Home() {
           </Reveal>
         </Section>
 
-        <Section id="how" label="how it works" title="The patterns behind the work">
-          <ConceptShowcase />
-        </Section>
-
         <Section id="projects" label="projects" title="Side projects">
           <Reveal stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {projects.map((p) => (
-              <article key={p.repo} className={card}>
+              <article key={p.repo} className={cardStatic}>
                 <p className="font-mono text-[13px] text-muted">
                   {/* Private repos show their domain instead of a GitHub path. */}
                   <span className="text-accent">~/</span>

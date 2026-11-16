@@ -21,7 +21,10 @@ export default function ConceptShowcase() {
   const { wrapRef, canvasRef, handleRef, status } = useLazyScene<ConceptHandle>(load, "concepts");
   const [concept, setConcept] = useState(0);
   const [variant, setVariant] = useState<VariantKey>("naive");
-  const [step, setStep] = useState(-1);
+  // Each concept opens on the naive version's end state (the failure), dimmed,
+  // so the first frame says something before anyone presses play.
+  const [step, setStep] = useState(CONCEPTS[0].naive.steps.length - 1);
+  const [preview, setPreview] = useState(true);
   const [playing, setPlaying] = useState(false);
 
   const c = CONCEPTS[concept];
@@ -29,8 +32,8 @@ export default function ConceptShowcase() {
   const last = steps.length - 1;
 
   useEffect(() => {
-    handleRef.current?.show(concept, variant, step, true);
-  }, [concept, variant, step, status, handleRef]);
+    handleRef.current?.show(concept, variant, step, !preview);
+  }, [concept, variant, step, preview, status, handleRef]);
 
   useEffect(() => {
     if (!playing) return;
@@ -43,15 +46,22 @@ export default function ConceptShowcase() {
   }, [playing, step, last]);
 
   const goConcept = (next: number) => {
-    setConcept((next + CONCEPTS.length) % CONCEPTS.length);
+    const i = (next + CONCEPTS.length) % CONCEPTS.length;
+    setConcept(i);
     setVariant("naive"); // show the problem first, then the fix
-    setStep(-1);
+    setStep(CONCEPTS[i].naive.steps.length - 1);
+    setPreview(true);
     setPlaying(false);
   };
   const goVariant = (v: VariantKey) => {
     setVariant(v);
     setStep(-1);
+    setPreview(false);
     setPlaying(false);
+  };
+  const leavePreview = (to: number) => {
+    setPreview(false);
+    setStep(to);
   };
   const onKey = (e: KeyboardEvent) => {
     if ((e.target as HTMLElement).tagName === "TEXTAREA") return;
@@ -59,8 +69,9 @@ export default function ConceptShowcase() {
     if (e.key === "ArrowRight") goConcept(concept + 1);
   };
 
-  const caption =
-    step < 0
+  const caption = preview
+    ? `${steps[last].caption} Press play to watch how it happens.`
+    : step < 0
       ? variant === "naive"
         ? "Press play to watch the naive version break, then switch to the fix."
         : "Press play to watch the fix handle the same situation."
@@ -77,7 +88,7 @@ export default function ConceptShowcase() {
           aria-current={i === concept}
           className="w-11 h-11 grid place-items-center cursor-pointer group"
         >
-          <span className={`block h-2 rounded-full transition-[width,background-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${i === concept ? "w-6 bg-accent" : "w-2 bg-line group-hover:bg-muted"}`} />
+          <span className={`block h-2 rounded-full transition-[width,background-color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${i === concept ? "w-6 bg-accent" : "w-2 bg-muted group-hover:bg-fg"} group-active:scale-90`} />
         </button>
       ))}
     </div>
@@ -107,7 +118,7 @@ export default function ConceptShowcase() {
               type="button"
               aria-pressed={variant === v}
               onClick={() => goVariant(v)}
-              className={`min-h-[44px] px-3.5 cursor-pointer transition-colors ${
+              className={`min-h-[44px] px-3.5 cursor-pointer transition-[color,background-color,transform] duration-[160ms] ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${
                 variant === v ? (v === "right" ? "bg-accent text-on-accent" : "bg-line text-fg") : "text-muted hover:text-fg"
               }`}
             >
@@ -124,7 +135,7 @@ export default function ConceptShowcase() {
             <ScenePoster name="concepts" live={status === "live"} />
             <canvas
               ref={canvasRef}
-              className={`relative block w-full h-full touch-pan-y transition-opacity duration-300 motion-reduce:transition-none ${status === "live" ? "opacity-100" : "opacity-0"}`}
+              className={`relative block w-full h-full touch-pan-y transition-opacity duration-300 motion-reduce:transition-none ${status === "live" ? (preview ? "opacity-60" : "opacity-100") : "opacity-0"}`}
             />
           </div>
         )}
@@ -158,25 +169,30 @@ export default function ConceptShowcase() {
       </div>
 
       <p aria-live="polite" className="font-mono text-sm min-h-[3em] text-fg">
-        <span className={variant === "right" ? "text-accent" : "text-muted"}>{step < 0 ? "$" : `${step + 1}/${last + 1}`}</span>{" "}
+        <span className={variant === "right" ? "text-accent" : "text-muted"}>{preview ? "result:" : step < 0 ? "$" : `${step + 1}/${last + 1}`}</span>{" "}
         {caption}
       </p>
 
       <div className="flex flex-wrap items-center gap-2">
-        <button type="button" className={`${btn} border-line hover:border-muted`} onClick={() => setStep((s) => Math.max(-1, s - 1))} disabled={step < 0} aria-label="Previous step">
+        <button type="button" className={`${btn} border-line hover:border-muted`} onClick={() => setStep((s) => Math.max(-1, s - 1))} disabled={preview || step < 0} aria-label="Previous step">
           ◀
         </button>
         <button
           type="button"
           className={`${btn} bg-accent text-on-accent border-accent font-medium hover:brightness-110`}
           onClick={() => {
+            if (preview) {
+              leavePreview(-1);
+              setPlaying(true);
+              return;
+            }
             if (step >= last) setStep(-1);
             setPlaying((p) => !p || step >= last);
           }}
         >
-          {playing ? "pause" : step >= last ? "replay" : "play"}
+          {playing ? "pause" : preview ? "play" : step >= last ? "replay" : "play"}
         </button>
-        <button type="button" className={`${btn} border-line hover:border-muted`} onClick={() => setStep((s) => Math.min(last, s + 1))} disabled={step >= last} aria-label="Next step">
+        <button type="button" className={`${btn} border-line hover:border-muted`} onClick={() => (preview ? leavePreview(0) : setStep((s) => Math.min(last, s + 1)))} disabled={!preview && step >= last} aria-label="Next step">
           ▶
         </button>
         <div className="hidden sm:flex ml-auto">{dots}</div>

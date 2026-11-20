@@ -218,6 +218,9 @@ export type Project = {
   stack: string[];
   code?: string; // omitted for private repos
   live?: string;
+  // Full-width card. With "dieline", it shows the box net from the Kotakita model next to the text.
+  wide?: boolean;
+  preview?: "dieline";
 };
 
 export const projects: Project[] = [
@@ -230,13 +233,6 @@ export const projects: Project[] = [
     code: "https://github.com/regahr/hierarchical-locations-api",
   },
   {
-    repo: "denrose",
-    title: "Denrose",
-    description: "Storefront for handmade clay earrings, with a CMS for the catalogue and a 3D clay earring.",
-    stack: ["Next.js 14", "Sanity", "Three.js"],
-    live: "https://denrose.store",
-  },
-  {
     repo: "doc-gen",
     title: "Doc Gen",
     description: "Turborepo monorepo for DOCX to PDF conversion, S3 storage and e-signing via Docuseal.",
@@ -244,16 +240,28 @@ export const projects: Project[] = [
     code: "https://github.com/regahr/doc-gen",
   },
   {
-    repo: "appointment-api",
-    title: "Appointment API",
-    description: "Scheduling API with slot constraints, documented system and database design.",
-    stack: ["NestJS", "TypeScript", "SQLite"],
-    code: "https://github.com/regahr/appointment-api",
+    repo: "kotakita",
+    title: "Kotakita",
+    description:
+      "Box-sticker designer for small sellers. Computes a 15-panel mailer dieline from L×W×H in mm, shows it in 3D, and exports a true-scale PDF. Client-side, no account.",
+    stack: ["React 19", "three.js", "pdf-lib", "Playwright"],
+    live: "https://kotakita.regahalmaruzty.com/en/",
+    wide: true,
+    preview: "dieline",
+  },
+  {
+    repo: "denrose",
+    title: "Denrose",
+    description: "Storefront for a handmade clay shop: WhatsApp checkout, per-item stock limits, Sanity CMS.",
+    stack: ["Next.js 14", "Sanity"],
+    live: "https://denrose.store",
+    wide: true,
   },
 ];
 
 export const moreProjects = [
   { name: "chick-pen", note: "the chicks from the about section, as a game", href: chickPenUrl },
+  { name: "appointment-api", note: "scheduling API with slot constraints", href: "https://github.com/regahr/appointment-api" },
   { name: "loop_station", note: "browser audio looper", href: "https://loop-station-nu.vercel.app" },
   {
     name: "fullstack-turborepo-starter",

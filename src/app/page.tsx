@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import TypingAnimation from "./components/TypingAnimation";
 import CodePuzzle from "./components/CodePuzzle";
+import Dieline from "./components/Dieline";
 import Reveal from "./components/Reveal";
 import { TrackedLink } from "./components/Track";
 import ChickPen from "./components/three/ChickPen";
@@ -273,27 +274,33 @@ export default function Home() {
         <Section id="projects" label="projects" title="Side projects">
           <Reveal stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {projects.map((p) => (
-              <article key={p.repo} className={cardStatic}>
-                <p className="font-mono text-[13px] text-muted">
-                  {/* Private repos show their domain instead of a GitHub path. */}
-                  <span className="text-accent">~/</span>
-                  {p.code ? `regahr/${p.repo}` : new URL(p.live ?? "").host}
-                </p>
-                <h3 className="text-xl font-semibold">{p.title}</h3>
-                <p className="text-muted text-[15px]">{p.description}</p>
-                <Chips items={p.stack} />
-                <div className="flex gap-[18px] font-mono text-[13px] mt-auto">
-                  {p.code && (
-                    <a href={p.code} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
-                      code &rarr;<span className="sr-only"> for {p.title}</span>
-                    </a>
-                  )}
-                  {p.live && (
-                    <a href={p.live} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
-                      live &rarr;<span className="sr-only"> demo of {p.title}</span>
-                    </a>
-                  )}
+              <article
+                key={p.repo}
+                className={`${cardStatic} ${p.wide ? "md:col-span-2" : ""} ${p.preview ? "sm:grid sm:grid-cols-[1fr_minmax(0,300px)] sm:gap-8 sm:items-center" : ""}`}
+              >
+                <div className="flex flex-col gap-3 h-full">
+                  <p className="font-mono text-[13px] text-muted">
+                    {/* Private repos show their domain instead of a GitHub path. */}
+                    <span className="text-accent">~/</span>
+                    {p.code ? `regahr/${p.repo}` : new URL(p.live ?? "").host}
+                  </p>
+                  <h3 className="text-xl font-semibold">{p.title}</h3>
+                  <p className="text-muted text-[15px]">{p.description}</p>
+                  <Chips items={p.stack} />
+                  <div className="flex gap-[18px] font-mono text-[13px] mt-auto">
+                    {p.code && (
+                      <a href={p.code} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
+                        code &rarr;<span className="sr-only"> for {p.title}</span>
+                      </a>
+                    )}
+                    {p.live && (
+                      <a href={p.live} target="_blank" rel="noopener noreferrer" className="border-b border-line hover:border-accent transition-colors">
+                        live &rarr;<span className="sr-only"> demo of {p.title}</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
+                {p.preview === "dieline" && <Dieline />}
               </article>
             ))}
           </Reveal>

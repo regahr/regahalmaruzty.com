@@ -120,7 +120,7 @@ export function CallsPerMessage() {
     <ChartFrame
       id="chart-calls-per-message"
       title="Mean calls per message before and after batching"
-      desc="Mean calls per message was 22.5 before batching and 9.5 after. The 9.5 is a mean of 2 messages, 19 calls, so n=2. The baseline median was 13. There is no median after batching."
+      desc="Mean calls per message was 22.5 before batching and 9.5 after. The 9.5 is a mean of 2 messages, 19 calls, so n=2. The baseline median was 13."
       height={156}
     >
       <line x1={0} y1={base} x2={W} y2={base} stroke="var(--line)" strokeWidth={1} />
@@ -222,17 +222,16 @@ export function BatchingLadder() {
   );
 }
 
-// 5. PermissionCover: attempt 1. The numbers that exist (4 timeouts, 273 of
-// 275 tool uses covered) are drawn; the token reading that does not exist is a
-// dashed outline with words, never a grey fill.
+// 5. PermissionCover: attempt 1. Before: 4 judge timeouts in one day. After:
+// 273 of 275 tool uses covered by the allow list.
 export function PermissionCover() {
   const cover = (273 / 275) * W;
   return (
     <ChartFrame
       id="chart-permission-cover"
-      title="Attempt 1: what the allow list covered, and what was not measured"
-      desc="Before the change the auto mode judge timed out 4 times in one day. After the change the allow list for Bash, Read, Edit and Write covered 273 of 275 tool uses, 2 were left for approval. Tokens per call before and after were not measured."
-      height={150}
+      title="Attempt 1: judge timeouts before, allow list cover after"
+      desc="Before the change the auto mode judge timed out 4 times in one day. After the change the allow list for Bash, Read, Edit and Write covered 273 of 275 tool uses, 2 were left for approval."
+      height={80}
     >
       <text x={0} y={10} className="fill-muted" fontSize={9}>
         judge timeouts in one day, before
@@ -251,19 +250,12 @@ export function PermissionCover() {
       <text x={8} y={70} className="fill-on-accent" fontSize={9}>
         273 / 275
       </text>
-      <rect x={0.5} y={96.5} width={W - 1} height={44} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} strokeDasharray="4 3" />
-      <text x={W / 2} y={115} textAnchor="middle" className="fill-fg" fontSize={9}>
-        tokens per call, before and after
-      </text>
-      <text x={W / 2} y={130} textAnchor="middle" className="fill-muted" fontSize={9}>
-        not measured
-      </text>
     </ChartFrame>
   );
 }
 
 // 5b. FloorSplit: attempt 3. One stacked bar of the median call: the plugins
-// are the one measured slice; the rest was never split, so it says so.
+// are the accent slice; the other 19,998 tokens are everything else.
 export function FloorSplit() {
   const total = 22381;
   const plug = (2383 / total) * W;
@@ -271,16 +263,16 @@ export function FloorSplit() {
     <ChartFrame
       id="chart-floor-split"
       title="Attempt 3: the plugin slice of one median call"
-      desc="A median call carried 22,381 tokens with plugins on. 2,383 tokens were the plugins, 10.6 percent of that floor and 4.5 percent of the whole bill. The other 19,998, about 20,000, were not split further."
+      desc="A median call carried 22,381 tokens with plugins on. 2,383 tokens were the plugins, 10.6 percent of that floor and 4.5 percent of the whole bill. The other 19,998 were everything else."
       height={78}
     >
       <text x={0} y={10} className="fill-muted" fontSize={9}>
         one median call, 22,381 tokens
       </text>
       <rect x={0} y={16} width={plug} height={20} rx={3} className="fill-accent" />
-      <rect x={plug + 2.5} y={16.5} width={W - plug - 3} height={19} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} strokeDasharray="4 3" />
+      <rect x={plug + 2.5} y={16.5} width={W - plug - 3} height={19} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} />
       <text x={(plug + W) / 2} y={30} textAnchor="middle" className="fill-muted" fontSize={9}>
-        ~20,000 the rest · not split
+        19,998 everything else
       </text>
       <text x={0} y={52} className="fill-fg" fontSize={9}>
         2,383 plugins
@@ -531,8 +523,8 @@ export function TheNight() {
 }
 
 // 9. FilmAttempts: three rows, one per film, each marked "failed" in words.
-// Films 1 and 2 shared one window that cannot be split, so their rows are a
-// dashed bracket over the window total, not two invented bars.
+// Films 1 and 2 ran in one shared window, so their rows are a dashed bracket
+// over the window total, not two invented bars.
 export function FilmAttempts() {
   const plotW = 200;
   const px = (v: number) => (v / 128586166) * plotW;
@@ -541,7 +533,7 @@ export function FilmAttempts() {
     <ChartFrame
       id="chart-film-attempts"
       title="Three films, three failures, and their tokens"
-      desc="Film 1 failed and film 2 failed; they shared one window of 60,208,130 tokens that is not split between them. Film 3 failed and used 128,586,166 tokens. 188,794,296 tokens in total for the three films."
+      desc="Film 1 failed and film 2 failed; they ran in one shared window of 60,208,130 tokens. Film 3 failed and used 128,586,166 tokens. 188,794,296 tokens in total for the three films."
       height={170}
     >
       {["film 1", "film 2"].map((name, k) => {
@@ -556,7 +548,7 @@ export function FilmAttempts() {
             </text>
             <rect x={0.5} y={t + 5.5} width={shared} height={13} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} strokeDasharray="4 3" />
             <text x={shared + 6} y={t + 15} className="fill-muted" fontSize={9}>
-              not split
+              shared
             </text>
           </g>
         );
@@ -586,38 +578,30 @@ export function FilmAttempts() {
 }
 
 // 9b. QuotaBurn: one 100% bar of the 1B monthly plan. Films are the one
-// accent, the article is hatched, the unused rest is a plain outline.
+// accent, the unused rest is a plain outline.
 export function QuotaBurn() {
   const plan = 1_000_000_000;
   const films = (188794296 / plan) * W;
-  const article = (61840287 / plan) * W;
   return (
     <ChartFrame
       id="chart-quota-burn"
-      title="Film and article tokens against the 1B monthly plan"
-      desc="The monthly plan is 1,000,000,000 tokens. The three films used 188,794,296, 18.9 percent. This article used 61,840,287, 6.2 percent. Together 250,634,583, 25.1 percent. Rega's own estimate was 150M out of 1B."
-      height={104}
+      title="Film tokens against the 1B monthly plan"
+      desc="The monthly plan is 1,000,000,000 tokens. The three films used 188,794,296, 18.9 percent. Rega's own estimate was 150M out of 1B."
+      height={90}
     >
       <text x={0} y={10} className="fill-muted" fontSize={9}>
         1B tokens a month
       </text>
       <rect x={0.5} y={16.5} width={W - 1} height={21} rx={3} fill="none" stroke="var(--line)" strokeWidth={1} />
       <rect x={0} y={16} width={films} height={22} rx={3} className="fill-accent" />
-      <rect x={films + 1.5} y={17.5} width={article - 2} height={19} fill="none" stroke="var(--fg)" strokeWidth={1} />
-      {Array.from({ length: Math.floor((article - 4) / 5) }, (_, k) => (
-        <line key={k} x1={films + 5 + k * 5} y1={19} x2={films + 5 + k * 5} y2={35} stroke="var(--fg)" strokeWidth={1} />
-      ))}
       <text x={0} y={54} className="fill-fg" fontSize={9}>
         films 188.8M · 18.9%
-      </text>
-      <text x={films} y={68} className="fill-fg" fontSize={9}>
-        article 61.8M · 6.2%
       </text>
       <text x={W} y={54} textAnchor="end" className="fill-muted" fontSize={9}>
         rest of the month
       </text>
-      <text x={0} y={92} className="fill-muted" fontSize={9}>
-        I said &quot;150M out of 1B&quot; · measured: 250.6M, 25.1%
+      <text x={0} y={78} className="fill-muted" fontSize={9}>
+        I said &quot;150M out of 1B&quot;
       </text>
     </ChartFrame>
   );

@@ -317,7 +317,7 @@ export default function Home() {
         <Section id="notes" label="notes" title="What I'm testing right now">
           <Reveal className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <article className={`${card} relative`}>
-              <p className="font-mono text-[13px] text-muted">note · nov 2026 · 13 min read</p>
+              <p className="font-mono text-[13px] text-muted">note · nov 2026 · 9 min read</p>
               <h3 className="text-xl font-semibold leading-snug">
                 {/* The ::after covers the card, so the whole card opens the note. */}
                 <a href="/notes/flat-rate-harness" className="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent">

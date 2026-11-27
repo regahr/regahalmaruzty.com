@@ -38,15 +38,15 @@ export function generateMetadata(): Metadata {
 const CHARTS: Record<ArticleChartId, { caption: string; chart: ReactNode }> = {
   "cache-share": { caption: "share of input that was a cache read · one 104-call window", chart: <CacheShare /> },
   "base-reread": { caption: "share of all input that was one base, re-read", chart: <BaseReread /> },
-  "permission-cover": { caption: "attempt 1 · what exists, and what was never measured", chart: <PermissionCover /> },
-  "calls-per-message": { caption: "mean calls per message, before and after batching · after is n=2", chart: <CallsPerMessage /> },
+  "permission-cover": { caption: "attempt 1 · before and after the allow list", chart: <PermissionCover /> },
+  "calls-per-message": { caption: "mean calls per message, before and after batching", chart: <CallsPerMessage /> },
   "batching-ladder": { caption: "input saved per batching rule, replayed · 44% is a ceiling", chart: <BatchingLadder /> },
-  "floor-split": { caption: "one median call, split where it was measured", chart: <FloorSplit /> },
+  "floor-split": { caption: "one median call, plugins against everything else", chart: <FloorSplit /> },
   "plugin-cost": { caption: "median tokens per call, four runs", chart: <PluginCost /> },
   "delegation-probes": { caption: "probe input, before and after delegation", chart: <DelegationProbes /> },
   "film-targets": { caption: "film 3 true peak and loudness range against target", chart: <FilmTargets /> },
-  "film-attempts": { caption: "three films, all failed · tokens where measured", chart: <FilmAttempts /> },
-  "quota-burn": { caption: "films and this article against the 1B monthly plan", chart: <QuotaBurn /> },
+  "film-attempts": { caption: "three films, all failed · tokens", chart: <FilmAttempts /> },
+  "quota-burn": { caption: "the three films against the 1B monthly plan", chart: <QuotaBurn /> },
   "the-night": { caption: "prompts per hour, 19:02 Nov 26 to 08:04 Nov 27 (WIB)", chart: <TheNight /> },
 };
 
@@ -80,12 +80,13 @@ function Label({ children }: { children: ReactNode }) {
   return <h3 className="mt-8 mb-3 font-mono text-[12px] uppercase tracking-[0.08em] text-muted">{children}</h3>;
 }
 
-// "not measured" is never a grey fill: a dashed outline with the words.
-function Value({ v, dim }: { v: string; dim?: boolean }) {
-  if (v === "not measured" || v === "not split") {
+// A feel value is Rega's own impression: set in words, with a small tag.
+function Value({ v, dim, feel }: { v: string; dim?: boolean; feel?: boolean }) {
+  if (feel) {
     return (
-      <span className="inline-flex items-center px-2 py-0.5 rounded border border-dashed border-muted font-mono text-[12px] text-muted">
-        {v}
+      <span className="inline-flex flex-wrap items-baseline gap-x-2">
+        <span className="text-[17px] leading-tight italic text-fg">{v}</span>
+        <span className="font-mono text-[11px] text-muted">my feel</span>
       </span>
     );
   }
@@ -94,7 +95,7 @@ function Value({ v, dim }: { v: string; dim?: boolean }) {
 
 function DataStrip({ data }: { data: ArticleDatum[] }) {
   return (
-    <dl className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-line border border-line rounded-xl overflow-hidden">
+    <dl className={`grid grid-cols-1 ${data.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"} gap-px bg-line border border-line rounded-xl overflow-hidden`}>
       {data.map((d) => (
         <div key={d.label} className="bg-surface px-4 py-4 flex flex-col gap-2">
           <dt className="font-mono text-[11px] leading-snug text-muted">{d.label}</dt>
@@ -107,7 +108,7 @@ function DataStrip({ data }: { data: ArticleDatum[] }) {
                 </span>
               </>
             )}
-            <Value v={d.after} />
+            <Value v={d.after} feel={d.feel} />
           </dd>
         </div>
       ))}
@@ -195,7 +196,7 @@ export default function FlatRateHarnessNote() {
 
       <main className="max-w-page mx-auto px-6 pt-14 md:pt-20 pb-16">
         <article className="max-w-[720px]">
-          <p className="font-mono text-[13px] text-accent mb-3">{"// "}note · nov 2026 · 13 min read</p>
+          <p className="font-mono text-[13px] text-accent mb-3">{"// "}note · nov 2026 · 9 min read</p>
           <h1 className="text-[32px] md:text-[44px] leading-[1.1] font-semibold tracking-tight">{a.title}</h1>
 
           {/* Progress rail: 7 jump links, then the verdict. Wraps on phones, never scrolls the page sideways. */}
@@ -284,7 +285,7 @@ export default function FlatRateHarnessNote() {
               {a.verdict.heading}
             </h2>
             <p className="mt-5 max-w-[68ch] text-[19px] leading-snug font-medium">
-              The judgement, and it is a judgement. {a.verdict.thesis}
+              {a.verdict.thesis}
             </p>
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-line border border-line rounded-xl overflow-hidden">
               <div className="bg-surface p-5">
@@ -307,7 +308,6 @@ export default function FlatRateHarnessNote() {
             <div className="mt-8">
               <Paras items={a.verdict.paragraphs} />
             </div>
-            <p className="mt-8 font-mono text-[15px] text-accent">{a.verdict.rule}</p>
           </section>
         </article>
       </main>

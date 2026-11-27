@@ -1,0 +1,67 @@
+WEBVTT
+
+NOTE Captions for page-v3.mp4, from the 16-station table in build-spec-v3.md.
+
+1
+00:00:00.000 --> 00:00:06.000
+Every call re-sends the whole context.
+
+2
+00:00:06.000 --> 00:00:12.000
+248 calls, 11 turns, 17.5M tokens.
+
+3
+00:00:12.000 --> 00:00:15.000
+951k a message, median.
+
+4
+00:00:15.000 --> 00:00:21.000
+Batch three reads: 30.1% less.
+
+5
+00:00:21.000 --> 00:00:24.000
+Three reads, one call.
+
+6
+00:00:24.000 --> 00:00:30.000
+Batch them all: 43.7% less.
+
+7
+00:00:30.000 --> 00:00:36.000
+The reading goes to a subagent.
+
+8
+00:00:36.000 --> 00:00:39.000
+Its own side: $0.
+
+9
+00:00:39.000 --> 00:00:45.000
+A fake model name returned 404.
+
+10
+00:00:45.000 --> 00:00:51.000
+Plugins and skills: +2,383 tokens.
+
+11
+00:00:51.000 --> 00:00:54.000
+4.5% of the real bill.
+
+12
+00:00:54.000 --> 00:01:00.000
+The main window still re-sends.
+
+13
+00:01:00.000 --> 00:01:06.000
+nufra, from nucifraga, the nutcracker.
+
+14
+00:01:06.000 --> 00:01:12.000
+Hides seeds. Finds them months later.
+
+15
+00:01:12.000 --> 00:01:18.000
+Stop anywhere. Resume where you left off.
+
+16
+00:01:18.000 --> 00:01:24.000
+nufra

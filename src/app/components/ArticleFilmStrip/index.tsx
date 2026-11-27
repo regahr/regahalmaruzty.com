@@ -8,7 +8,7 @@ import type { ArticleFilm } from "@/content/site";
 // the poster. The <video> is not in the DOM, so no mp4 is fetched until a
 // press. On press the native element mounts with native controls and the
 // control goes away, leaving the native chrome in charge.
-function Cell({ film }: { film: ArticleFilm }) {
+export function FilmCell({ film }: { film: ArticleFilm }) {
   const [playing, setPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -27,7 +27,7 @@ function Cell({ film }: { film: ArticleFilm }) {
             ref={videoRef}
             controls
             playsInline
-            preload="metadata"
+            preload="none"
             width={896}
             height={1120}
             poster={film.poster}
@@ -53,7 +53,7 @@ function Cell({ film }: { film: ArticleFilm }) {
       </div>
       <figcaption className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <h3 className="font-mono text-xs text-accent">{film.label}</h3>
+          <p className="font-mono text-xs text-accent">{film.label}</p>
           {!playing && (
             <button
               type="button"
@@ -75,7 +75,7 @@ export default function ArticleFilmStrip({ films }: { films: ArticleFilm[] }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {films.map((f) => (
-        <Cell key={f.attempt} film={f} />
+        <FilmCell key={f.attempt} film={f} />
       ))}
     </div>
   );

@@ -46,7 +46,7 @@ export function CacheShare() {
     <ChartFrame
       id="chart-cache-share"
       title="Share of all input that was a cache read"
-      desc="All input split in two parts. 87.9 percent was a cache read. 12.1 percent was the rest."
+      desc="All input in one 104-call window, split in two parts. 87.9 percent was a cache read. 12.1 percent was the rest."
       height={64}
     >
       <defs>
@@ -106,29 +106,35 @@ export function BaseReread() {
   );
 }
 
-// 3. CallsPerMessage: two bars on a shared zero. Values sit above the bars;
-// the axis label says what is being counted.
+// 3. CallsPerMessage: mean against mean, the only pair that exists. The
+// after bar is a mean of 2 messages, so n=2 is printed on it. The baseline
+// median sits as a dashed rule, because there is no median after.
 export function CallsPerMessage() {
   const base = 118;
-  const top = 26;
-  const scale = (base - top) / 13;
-  const before = 13 * scale;
+  const top = 22;
+  const scale = (base - top) / 22.5;
+  const before = 22.5 * scale;
   const after = 9.5 * scale;
+  const medianY = base - 13 * scale;
   return (
     <ChartFrame
       id="chart-calls-per-message"
-      title="Median calls per message before and after batching"
-      desc="Median calls per message was 13 before batching and 9.5 after."
+      title="Mean calls per message before and after batching"
+      desc="Mean calls per message was 22.5 before batching and 9.5 after. The 9.5 is a mean of 2 messages, 19 calls, so n=2. The baseline median was 13. There is no median after batching."
       height={156}
     >
       <line x1={0} y1={base} x2={W} y2={base} stroke="var(--line)" strokeWidth={1} />
+      <line x1={60} y1={medianY} x2={140} y2={medianY} stroke="var(--muted)" strokeWidth={1} strokeDasharray="3 3" />
+      <text x={W} y={148} textAnchor="end" className="fill-muted" fontSize={9}>
+        - - - median before: 13
+      </text>
       <rect x={72} y={base - before} width={56} height={before} rx={3} className="fill-muted" />
       <rect x={212} y={base - after} width={56} height={after} rx={3} className="fill-accent" />
       <text x={100} y={base - before - 6} textAnchor="middle" className="fill-fg">
-        13
+        22.5
       </text>
       <text x={240} y={base - after - 6} textAnchor="middle" className="fill-fg">
-        9.5
+        9.5 · n=2
       </text>
       <text x={100} y={132} textAnchor="middle" className="fill-muted" fontSize={9}>
         before batching
@@ -137,7 +143,7 @@ export function CallsPerMessage() {
         after
       </text>
       <text x={0} y={148} className="fill-muted" fontSize={9}>
-        median calls per message
+        mean calls per message
       </text>
     </ChartFrame>
   );
@@ -216,31 +222,71 @@ export function BatchingLadder() {
   );
 }
 
-// 5. NotMeasured: attempt 1 has no before and no after. An empty framed box
-// with a zero rule and two "not taken" ticks, so the blank looks deliberate.
-export function NotMeasured() {
+// 5. PermissionCover: attempt 1. The numbers that exist (4 timeouts, 273 of
+// 275 tool uses covered) are drawn; the token reading that does not exist is a
+// dashed outline with words, never a grey fill.
+export function PermissionCover() {
+  const cover = (273 / 275) * W;
   return (
     <ChartFrame
-      id="chart-not-measured"
-      title="Attempt 1 was not measured"
-      desc="Attempt 1 has no measurement before or after. Before: not taken. After: not taken. Both readings are zero because they do not exist."
-      height={104}
+      id="chart-permission-cover"
+      title="Attempt 1: what the allow list covered, and what was not measured"
+      desc="Before the change the auto mode judge timed out 4 times in one day. After the change the allow list for Bash, Read, Edit and Write covered 273 of 275 tool uses, 2 were left for approval. Tokens per call before and after were not measured."
+      height={150}
     >
       <text x={0} y={10} className="fill-muted" fontSize={9}>
-        attempt 1
+        judge timeouts in one day, before
       </text>
-      <rect x={0} y={16} width={W} height={80} rx={3} fill="none" stroke="var(--line)" strokeWidth={1} />
-      <text x={170} y={54} textAnchor="middle" className="fill-muted">
-        no measurement before or after
+      {[0, 1, 2, 3].map((k) => (
+        <rect key={k} x={k * 22} y={16} width={16} height={16} rx={3} className="fill-muted" />
+      ))}
+      <text x={96} y={28} className="fill-fg" fontSize={9}>
+        4
       </text>
-      <line x1={8} y1={78} x2={332} y2={78} stroke="var(--line)" strokeWidth={1} />
-      <line x1={95} y1={78} x2={95} y2={70} stroke="var(--muted)" strokeWidth={1} />
-      <line x1={245} y1={78} x2={245} y2={70} stroke="var(--muted)" strokeWidth={1} />
-      <text x={95} y={90} textAnchor="middle" className="fill-muted" fontSize={9}>
-        before: not taken
+      <text x={0} y={52} className="fill-muted" fontSize={9}>
+        tool uses covered by the allow list, after
       </text>
-      <text x={245} y={90} textAnchor="middle" className="fill-muted" fontSize={9}>
-        after: not taken
+      <rect x={0} y={58} width={W} height={16} rx={3} fill="none" stroke="var(--line)" strokeWidth={1} />
+      <rect x={0} y={58} width={cover} height={16} rx={3} className="fill-accent" />
+      <text x={8} y={70} className="fill-on-accent" fontSize={9}>
+        273 / 275
+      </text>
+      <rect x={0.5} y={96.5} width={W - 1} height={44} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} strokeDasharray="4 3" />
+      <text x={W / 2} y={115} textAnchor="middle" className="fill-fg" fontSize={9}>
+        tokens per call, before and after
+      </text>
+      <text x={W / 2} y={130} textAnchor="middle" className="fill-muted" fontSize={9}>
+        not measured
+      </text>
+    </ChartFrame>
+  );
+}
+
+// 5b. FloorSplit: attempt 3. One stacked bar of the median call: the plugins
+// are the one measured slice; the rest was never split, so it says so.
+export function FloorSplit() {
+  const total = 22381;
+  const plug = (2383 / total) * W;
+  return (
+    <ChartFrame
+      id="chart-floor-split"
+      title="Attempt 3: the plugin slice of one median call"
+      desc="A median call carried 22,381 tokens with plugins on. 2,383 tokens were the plugins, 10.6 percent of that floor and 4.5 percent of the whole bill. The other 19,998, about 20,000, were not split further."
+      height={78}
+    >
+      <text x={0} y={10} className="fill-muted" fontSize={9}>
+        one median call, 22,381 tokens
+      </text>
+      <rect x={0} y={16} width={plug} height={20} rx={3} className="fill-accent" />
+      <rect x={plug + 2.5} y={16.5} width={W - plug - 3} height={19} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} strokeDasharray="4 3" />
+      <text x={(plug + W) / 2} y={30} textAnchor="middle" className="fill-muted" fontSize={9}>
+        ~20,000 the rest · not split
+      </text>
+      <text x={0} y={52} className="fill-fg" fontSize={9}>
+        2,383 plugins
+      </text>
+      <text x={0} y={68} className="fill-muted" fontSize={9}>
+        10.6% of the floor · 4.5% of the bill
       </text>
     </ChartFrame>
   );
@@ -307,7 +353,8 @@ export function PluginCost() {
   );
 }
 
-// 7. DelegationProbes: two pairs. Before is muted, after is the one accent.
+// 7. DelegationProbes: two pairs. Before is muted, after is the one accent,
+// and each bar says "before" or "after" in words, so colour is not the only signal.
 // The smaller values keep all three decimals so no number is rounded.
 export function DelegationProbes() {
   const base = 142;
@@ -330,8 +377,8 @@ export function DelegationProbes() {
     <ChartFrame
       id="chart-delegation-probes"
       title="Input tokens before and after delegation, two probes"
-      desc="Probe one input fell from 1.19 million tokens to 358 thousand. Probe two fell from 1.51 million tokens to 456 thousand."
-      height={164}
+      desc="Probe one input fell from 1.19 million tokens before delegation to 358 thousand after. Probe two fell from 1.51 million tokens before to 456 thousand after."
+      height={180}
     >
       {[1.0, 1.5].map((v) => {
         const y = base - v * perMillion;
@@ -390,139 +437,187 @@ export function DelegationProbes() {
             >
               {g.after.label}
             </text>
+            <text x={g.centre - 26} y={base + 12} textAnchor="middle" className="fill-muted" fontSize={9}>
+              before
+            </text>
+            <text x={g.centre + 26} y={base + 12} textAnchor="middle" className="fill-fg" fontSize={9}>
+              after
+            </text>
           </g>
         );
       })}
-      <text x={0} y={158} className="fill-muted" fontSize={9}>
+      <text x={0} y={174} className="fill-muted" fontSize={9}>
         input tokens, millions
       </text>
     </ChartFrame>
   );
 }
 
-// 8. TheNight: messages per hour, 19:00 through 08:59. Zero hours keep a flat
-// mark on the baseline so they read as measured zero, not as missing.
+// 8. TheNight: Rega's typed prompts per hour, 19:00 Nov 26 through 08:04
+// Nov 27 WIB, recounted from the session logs (article/night-count.md). Zero
+// hours keep a flat mark on the baseline so they read as measured zero. The
+// silent stretch from 04:14 to 08:04 is bracketed and labelled.
 export function TheNight() {
   const base = 100;
-  const scale = 80 / 13;
+  const peak = 12;
+  const scale = 72 / peak;
   const hours = [
-    { h: "19", v: 9 },
-    { h: "20", v: 3 },
-    { h: "21", v: 4 },
-    { h: "22", v: 2 },
-    { h: "23", v: 1 },
-    { h: "00", v: 5 },
-    { h: "01", v: 13 },
+    { h: "19", v: 2 },
+    { h: "20", v: 1 },
+    { h: "21", v: 11 },
+    { h: "22", v: 7 },
+    { h: "23", v: 12 },
+    { h: "00", v: 10 },
+    { h: "01", v: 8 },
     { h: "02", v: 3 },
-    { h: "03", v: 7 },
-    { h: "04", v: 4 },
+    { h: "03", v: 2 },
+    { h: "04", v: 1 },
     { h: "05", v: 0 },
     { h: "06", v: 0 },
-    { h: "07", v: 2 },
-    { h: "08", v: 11 },
+    { h: "07", v: 0 },
+    { h: "08", v: 1 },
   ];
   const slot = 312 / hours.length;
   const barW = 16;
   const xOf = (i: number) => 22 + i * slot + (slot - barW) / 2;
-  const axisHours = [0, 4, 5, 9, 13];
+  const axisHours = [0, 4, 6, 9, 13];
+  const gapX1 = xOf(9) + barW + (slot - barW) / 2;
+  const gapX2 = xOf(13) - (slot - barW) / 2;
   return (
     <ChartFrame
       id="chart-the-night"
-      title="Messages per hour across the night"
-      desc="Messages per hour through the night. 19h 9, 20h 3, 21h 4, 22h 2, 23h 1, 00h 5, 01h 13, 02h 3, 03h 7, 04h 4, 05h 0, 06h 0, 07h 2, 08h 11."
-      height={138}
+      title="Prompts per hour across the night"
+      desc="Prompts Rega typed per hour, 19:02 Nov 26 to 08:04 Nov 27 WIB. 19h 2, 20h 1, 21h 11, 22h 7, 23h 12, 00h 10, 01h 8, 02h 3, 03h 2, 04h 1, 05h 0, 06h 0, 07h 0, 08h 1. 58 in total. No prompt between 04:14 and 08:04."
+      height={152}
     >
       <line x1={22} y1={base} x2={334} y2={base} stroke="var(--line)" strokeWidth={1} />
+      <line x1={gapX1} y1={16} x2={gapX1} y2={base - 6} stroke="var(--muted)" strokeWidth={1} strokeDasharray="3 3" />
+      <line x1={gapX2} y1={16} x2={gapX2} y2={base - 6} stroke="var(--muted)" strokeWidth={1} strokeDasharray="3 3" />
+      <text x={(gapX1 + gapX2) / 2} y={14} textAnchor="middle" className="fill-muted" fontSize={9}>
+        04:14 → 08:04
+      </text>
+      <text x={(gapX1 + gapX2) / 2} y={26} textAnchor="middle" className="fill-muted" fontSize={9}>
+        no prompt
+      </text>
       {hours.map((d, i) => {
         const x = xOf(i);
         const h = d.v * scale;
         if (d.v === 0) {
           return <rect key={d.h} x={x} y={base - 2} width={barW} height={2} className="fill-muted" />;
         }
-        const accent = d.v === 13;
+        const accent = d.v === peak;
         return (
           <g key={d.h}>
-            <rect
-              x={x}
-              y={base - h}
-              width={barW}
-              height={h}
-              rx={3}
-              className={accent ? "fill-accent" : "fill-muted"}
-            />
-            {accent && (
-              <text x={x + barW / 2} y={base - h - 5} textAnchor="middle" className="fill-accent">
-                13
-              </text>
-            )}
+            <rect x={x} y={base - h} width={barW} height={h} rx={3} className={accent ? "fill-accent" : "fill-muted"} />
+            <text x={x + barW / 2} y={base - h - 4} textAnchor="middle" className={accent ? "fill-accent" : "fill-fg"} fontSize={8}>
+              {d.v}
+            </text>
           </g>
         );
       })}
       {axisHours.map((i) => (
-        <text
-          key={hours[i].h}
-          x={xOf(i) + barW / 2}
-          y={116}
-          textAnchor="middle"
-          className="fill-muted"
-          fontSize={9}
-        >
+        <text key={hours[i].h} x={xOf(i) + barW / 2} y={116} textAnchor="middle" className="fill-muted" fontSize={9}>
           {hours[i].h}
         </text>
       ))}
-      <text x={0} y={132} className="fill-muted" fontSize={9}>
-        messages per hour
+      <text x={0} y={134} className="fill-muted" fontSize={9}>
+        prompts per hour, WIB
+      </text>
+      <text x={0} y={147} className="fill-muted" fontSize={9}>
+        58 prompts in total
       </text>
     </ChartFrame>
   );
 }
 
-// 9. FilmTokens: the two film windows on one token axis, with the total stated.
-export function FilmTokens() {
-  const plotW = 220;
+// 9. FilmAttempts: three rows, one per film, each marked "failed" in words.
+// Films 1 and 2 shared one window that cannot be split, so their rows are a
+// dashed bracket over the window total, not two invented bars.
+export function FilmAttempts() {
+  const plotW = 200;
   const px = (v: number) => (v / 128586166) * plotW;
+  const shared = px(60208130);
   return (
     <ChartFrame
-      id="chart-film-tokens"
-      title="Tokens used by the two film windows"
-      desc="The two film windows used 128,586,166 and 60,208,130 tokens. 188,794,296 in total."
-      height={150}
+      id="chart-film-attempts"
+      title="Three films, three failures, and their tokens"
+      desc="Film 1 failed and film 2 failed; they shared one window of 60,208,130 tokens that is not split between them. Film 3 failed and used 128,586,166 tokens. 188,794,296 tokens in total for the three films."
+      height={170}
     >
-      <text x={0} y={12} className="fill-muted" fontSize={9}>
-        film window 1
+      {["film 1", "film 2"].map((name, k) => {
+        const t = 12 + k * 34;
+        return (
+          <g key={name}>
+            <text x={0} y={t} className="fill-muted" fontSize={9}>
+              {name}
+            </text>
+            <text x={W} y={t} textAnchor="end" className="fill-fg" fontSize={9}>
+              failed
+            </text>
+            <rect x={0.5} y={t + 5.5} width={shared} height={13} rx={3} fill="none" stroke="var(--muted)" strokeWidth={1} strokeDasharray="4 3" />
+            <text x={shared + 6} y={t + 15} className="fill-muted" fontSize={9}>
+              not split
+            </text>
+          </g>
+        );
+      })}
+      <text x={0} y={80} className="fill-muted" fontSize={9}>
+        films 1 + 2 share one window: 60,208,130
       </text>
-      <rect x={0} y={18} width={px(128586166)} height={16} rx={3} className="fill-muted" />
-      <text x={px(128586166) + 6} y={29} className="fill-fg" fontSize={9}>
+      <text x={0} y={98} className="fill-muted" fontSize={9}>
+        film 3
+      </text>
+      <text x={W} y={98} textAnchor="end" className="fill-fg" fontSize={9}>
+        failed
+      </text>
+      <rect x={0} y={103} width={px(128586166)} height={14} rx={3} className="fill-accent" />
+      <text x={px(128586166) + 6} y={114} className="fill-fg" fontSize={9}>
         128,586,166
       </text>
-      <text x={0} y={58} className="fill-muted" fontSize={9}>
-        film window 2
-      </text>
-      <rect x={0} y={64} width={px(60208130)} height={16} rx={3} className="fill-muted" />
-      <text x={px(60208130) + 6} y={75} className="fill-fg" fontSize={9}>
-        60,208,130
-      </text>
-      <line x1={0} y1={90} x2={plotW} y2={90} stroke="var(--line)" strokeWidth={1} />
-      <text x={0} y={104} className="fill-fg">
+      <line x1={0} y1={128} x2={W} y2={128} stroke="var(--line)" strokeWidth={1} />
+      <text x={0} y={144} className="fill-fg">
         188,794,296 in total
       </text>
-      <line x1={0} y1={114} x2={plotW} y2={114} stroke="var(--line)" strokeWidth={1} />
-      {(
-        [
-          { x: 0, label: "0", anchor: "start" },
-          { x: px(50000000), label: "50", anchor: "middle" },
-          { x: px(100000000), label: "100", anchor: "middle" },
-        ] as const
-      ).map((t) => (
-        <g key={t.label}>
-          <line x1={t.x} y1={114} x2={t.x} y2={119} stroke="var(--line)" strokeWidth={1} />
-          <text x={t.x} y={130} textAnchor={t.anchor} className="fill-muted" fontSize={9}>
-            {t.label}
-          </text>
-        </g>
+      <text x={0} y={162} className="fill-muted" fontSize={9}>
+        tokens, cache included
+      </text>
+    </ChartFrame>
+  );
+}
+
+// 9b. QuotaBurn: one 100% bar of the 1B monthly plan. Films are the one
+// accent, the article is hatched, the unused rest is a plain outline.
+export function QuotaBurn() {
+  const plan = 1_000_000_000;
+  const films = (188794296 / plan) * W;
+  const article = (61840287 / plan) * W;
+  return (
+    <ChartFrame
+      id="chart-quota-burn"
+      title="Film and article tokens against the 1B monthly plan"
+      desc="The monthly plan is 1,000,000,000 tokens. The three films used 188,794,296, 18.9 percent. This article used 61,840,287, 6.2 percent. Together 250,634,583, 25.1 percent. Rega's own estimate was 150M out of 1B."
+      height={104}
+    >
+      <text x={0} y={10} className="fill-muted" fontSize={9}>
+        1B tokens a month
+      </text>
+      <rect x={0.5} y={16.5} width={W - 1} height={21} rx={3} fill="none" stroke="var(--line)" strokeWidth={1} />
+      <rect x={0} y={16} width={films} height={22} rx={3} className="fill-accent" />
+      <rect x={films + 1.5} y={17.5} width={article - 2} height={19} fill="none" stroke="var(--fg)" strokeWidth={1} />
+      {Array.from({ length: Math.floor((article - 4) / 5) }, (_, k) => (
+        <line key={k} x1={films + 5 + k * 5} y1={19} x2={films + 5 + k * 5} y2={35} stroke="var(--fg)" strokeWidth={1} />
       ))}
-      <text x={0} y={144} className="fill-muted" fontSize={9}>
-        tokens, millions
+      <text x={0} y={54} className="fill-fg" fontSize={9}>
+        films 188.8M · 18.9%
+      </text>
+      <text x={films} y={68} className="fill-fg" fontSize={9}>
+        article 61.8M · 6.2%
+      </text>
+      <text x={W} y={54} textAnchor="end" className="fill-muted" fontSize={9}>
+        rest of the month
+      </text>
+      <text x={0} y={92} className="fill-muted" fontSize={9}>
+        I said &quot;150M out of 1B&quot; · measured: 250.6M, 25.1%
       </text>
     </ChartFrame>
   );

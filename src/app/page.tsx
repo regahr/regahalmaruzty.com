@@ -99,10 +99,11 @@ const Icon = {
   ),
 };
 
-const navLinks = ["about", "experience", "work", "projects", "contact"];
+const navLinks = ["about", "experience", "work", "projects", "notes", "contact"];
 const phoneNavLinks = [
   { id: "work", label: "work" },
   { id: "how", label: "how" },
+  { id: "notes", label: "notes" },
   { id: "contact", label: "contact" },
 ];
 
@@ -131,7 +132,7 @@ export default function Home() {
           <ul className="hidden sm:flex gap-6 font-mono text-[13px]">
             {navLinks.map((l) => (
               <li key={l}>
-                <a href={`#${l}`} className="text-muted hover:text-fg transition-colors">
+                <a href={`#${l}`} className="min-h-[44px] inline-flex items-center text-muted hover:text-fg transition-colors">
                   {l}
                 </a>
               </li>
@@ -311,6 +312,22 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </Section>
+
+        <Section id="notes" label="notes" title="What I'm testing right now">
+          <Reveal className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <article className={`${card} relative`}>
+              <p className="font-mono text-[13px] text-muted">note · nov 2026 · 13 min read</p>
+              <h3 className="text-xl font-semibold leading-snug">
+                {/* The ::after covers the card, so the whole card opens the note. */}
+                <a href="/notes/flat-rate-harness" className="after:absolute after:inset-0 after:rounded-xl focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-accent">
+                  Flat rate vs my agent harness
+                </a>
+              </h3>
+              <p className="text-muted text-[15px]">Four harness attempts, three failed films, one night without sleep.</p>
+              <span aria-hidden="true" className="mt-auto pt-1 font-mono text-[13px] text-accent">read the note &rarr;</span>
+            </article>
+          </Reveal>
         </Section>
 
         <Section id="stack" label="stack" title="What I work with">
